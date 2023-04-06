@@ -1,0 +1,268 @@
+<html>
+
+<head>
+    <title>Test app</title>
+    <style>
+        .list-item {
+            margin: 2px;
+            border: 1px solid;
+        }
+
+        .list-item select {
+            width: 100%
+        }
+
+        .list {
+            overflow-y: auto;
+            height: 500px;
+            max-height: 500px;
+            border: 2px solid;
+
+        }
+
+        .left,
+        .right {
+            width: 40%
+        }
+
+        .left {
+            padding-right: 2%
+        }
+
+        .right>div:nth-child(n+2) {
+            padding-top: 1rem;
+        }
+
+        .lists-wrapper {
+            display: flex;
+            place-content: center;
+        }
+
+        .filter{
+            display: flex;
+        }
+
+        .result-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #spiderTable_wrapper {
+            width: 82%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    <script>
+        const allCharacteristics = {
+            "Sex": ["Male", "Female"],
+            "Overall Appearance" : ["inconspicuous, generally dark", "bright, red, orange", "conspicuous contrast legs/prosoma", "pale, ground or cave dweller"],
+            "Length of femur I :&lt;relative to prosoma&gt;" : ["equal in length", "longer than prosoma", "shorter than prosoma"],
+            "Prosoma &lt;appearance&gt;" : ["inconspicuous", "margins with teeth", "with conspicuous hairs/spines", "with pits (dorsally)"],
+            "Fovea as darkened groove" : ["yes", "no"],
+            "Opisthosoma &lt;appearance&gt;" : ["conspicuously hairy", "patterned", "unicolourous, inconspicuous", "with scutum"],
+            "Dorsal spines on femur I: &lt;count&gt;" : ["multiple", "none", "one"],
+            "Posterior eye row: &lt;form&gt;" : ["procurved", "recurved", "straight"],
+            "Posterior median eye (PME) separation: &lt;relative to diameter (d)&gt;" : ["distinctly greater than d", "distinctly less than d", "equal to d"],
+            "Headregion of male: &lt;appearance&gt;" : ["complex", "inconspicuous", "sulci present", "with lobe (simple)", "with horns/tufts"],
+            "Eyes: &lt;appearance&gt;" : ["normal", "reduced"],
+            "Anterior median eyes: &lt;size relative to anterior lateral eyes ALE&gt;" : ["about the same as ALE", "distinctly larger than ALE", "distinctly smaller than ALE"],
+            "Prolateral spines on femur I: &lt;count&gt;" : ["multiple", "none", "one"],
+            "Prolateral spines on tibia I: &lt;count&gt;" : ["multiple", "none", "one"],
+            "Anterior cheliceral teeth: &lt;appearance&gt;" : ["conspicuously large", "unremarkable in size"],
+            "Conspicuous structures on chelicerae: &lt;appearance&gt;" : ["apophyses/teeth-like processes/tubercles", "none", "spines"],
+            "Maxillae: &lt;appearance&gt;" : ["one or more teeth/tubercles", "unremarkable"],
+            "Sternum: &lt;appearance&gt;" : ["pitted", "rugose", "smooth"],
+            "Sternum: &lt;extends between coxae IV&gt;" : ["yes", "no"],
+            "Width of sternum between coxae IV: &lt;relative to width of coxae IV (d)&gt;" : ["distinctly greater than d", "distinctly less than d", "equal to d"],
+            "Position of TmI by range: &lt;relative to metatarsus&gt;" : ["0.10-0.19", "0.20-0.29", "0.30-0.39", "0.40-0.49", "0.50-0.59", "0.60-0.69", "0.70-0.79", "0.80-0.89", "0.90-0.98"],
+            "Metatarsus IV dorsally: &lt;presence of trichobothrium (TmIV)&gt;" : [" trichobothrium present",  "trichobothrium absent"],
+            "Dorsal spines on metatarsus I: &lt;count&gt;" : ["multiple", "none", "one"],
+            "Tibia IV: &lt;number of dorsal spines&gt;" : ["one dorsal spine", "two dorsal spines"],
+            "Numbers of dorsal spines on tibia I, II, III, IV: &lt;tibial spine formula&gt;" : ["0", "11", "1111", "2211", "2221", "2222"],
+            "Tibia I-II ventrally: &lt;presence of spines&gt;" : ["no spines", "stout spines in two rows"], 
+            "Male pedipalp: femur &lt;appearance&gt;" : ["unremarkable", "conspicuous"],
+            "Male pedipalp: patella &lt;appearance&gt;" : ["conspicuously swollen", "unremarkable", "with apophyses", "with conspicuous spines (single or tufts)"],
+            "Male pedipalp: tibia &lt;appearance&gt;" : ["unremarkable", "with complex apophysis", "with multiple, complex apophysis", "with multiple, simple apophysis", "with one or more spines", "with simple apophysis", "with tufts of hair or spines"],
+            "Male pedipalp: cymbium &lt;appearance&gt;" : ["margin with notches/bulges", "bulges", "with doesal projections/conical elevations"],
+            "Male pedipalp: paracymbium &lt;form&gt;" : ["complex", "simple"],
+            "Male pedipalp: branches of paracymbium &lt;presence of teeth&gt;" : ["teeth absent", "teeth present"],
+            "Male pedipalp: embolus &lt;appearance&gt;" : ["conspicuous, circular", "conspicuous, curled", "unremarkable"],
+            "Male pedipalp: lamella characteristica &lt;presence&gt;" : ["absent", "conspicuous"],
+            "Female palp: claw &lt;presence&gt;" : ["conspicuous", "not present/ inconspicuous"],
+            "Epigyne: &lt;form&gt;" : ["flat", "protrudes"], 
+            "Epigyne: &lt;seminal receptacles&gt;" : ["underlying structures (e.g., seminal receptacles) not visible", "underlying structures (e.g., seminal receptacles) visible"],
+            "Distribution" : ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
+        }
+        const defaultPrior = 1 / 1531; //Value based on the total number of characteristics;
+
+        var nextPriors = {};
+
+        var spidersTable;
+
+        $(document).ready(function () {
+            addFilter();
+            getSpidersForSelection('', '');
+        });
+
+        // function createCharacteristicName(characteristicKeyIndex, characteristicValueIndex){ 
+        //     let characteristicKeyName = Object.keys(allCharacteristics)[characteristicKeyIndex];
+        //     return `${characteristicKeyName.toLowerCase()}_${allCharacteristics[characteristicKeyName][characteristicValueIndex].toLowerCase()}`; 
+        // }
+
+        function generateDropDownOptionsHtml(options, onChangeFunctionName){
+            let filterOptions = [];
+            filterOptions.push(`<select onchange="${onChangeFunctionName}(event)">`);
+            filterOptions.push('<option></option>');
+            options.forEach(option => {
+                filterOptions.push(`<option value="${option}">${option}</option>`);
+            });    
+            filterOptions.push('</select>');  
+            return filterOptions.join('');
+        }
+
+        function getCharacteristicsPossibleValues(characteristic){
+            return allCharacteristics[characteristic];
+        }
+
+        function onCharacteristicKeySelected(event){
+            let selectedIndex = event.srcElement.selectedIndex - 1; //Subtracting 1 to remove empty option element on the dropdown which is at index 0
+            let characteristicValues = getCharacteristicsPossibleValues(Object.keys(allCharacteristics)[selectedIndex]);
+            let characteristicValuesOptions = generateDropDownOptionsHtml(characteristicValues, "selectCharacteristicValue");
+            event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
+        }
+
+        function addFilter(){
+            let filtersElement = document.getElementById('filters');
+            var newFilter = document.createElement('div');
+            newFilter.className = 'filter';
+            newFilter.innerHTML = createFilterInnerHtml();
+            filtersElement.appendChild(newFilter);
+        }
+
+        function createFilterInnerHtml(){
+            return `<div class="characteristic-key">
+                        ${generateDropDownOptionsHtml(Object.keys(allCharacteristics), "onCharacteristicKeySelected")}
+                    </div>
+                    <div> = </div>
+                    <div class="characteristic-value">
+                        <select></select>
+                    </div>
+                    <div>
+                        <input type="button" value="Add" onclick="addFilter(event)"/>
+                    </div>
+                    <div>
+                        <input type="button" value="Remove" id="removeFilterElement" onclick="removeFilter(event)"/>
+                    </div>`;
+        }
+
+        function selectCharacteristicValue(event){
+            console.dir(event);
+            let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
+            let characteristicValue = event.target.value;           
+            console.log(characteristicKey, characteristicValue, nextPriors);
+            getSpidersForSelection(characteristicKey, characteristicValue)
+        }
+
+        function getSpidersForSelection(selectedKey, selectedValue){
+            $.ajax({
+                url:`http://127.0.0.1:5000/api/v1/calculate_posterior?key=${selectedKey}&value=${selectedValue}`,
+                dataType:'json',
+                type: 'POST',
+                contentType: "application/json",
+                data:JSON.stringify(nextPriors),
+                success: function(data){
+                    console.dir(data);
+                    storePriors(data);
+                    populateSpiders(data);
+                },
+                error: function(error, data){
+                    alert(error)
+                    console.dir(error);
+                    console.dir(data);
+                }
+            });
+        }
+
+        function removeFilter(event){            
+            event.srcElement.parentElement.parentElement.remove();
+        }
+
+        function storePriors(rows){
+            $.each(rows, function (index, value) {
+                nextPriors[value['Species Name']] = value['Posterior']
+            });
+        }
+
+        function populateSpiders(rows) {
+            //ajax.showProgressBar;
+            let html = '';
+            let temp = '';
+            let rowCount = 1;
+            //alert('the total no of rows are ' + rows.length);
+            $.each(rows, function (index, value) {
+                console.log(index, value)
+                html += `<tr>
+                            <td>${rowCount}</td>
+                            <td>${value['Species Name']}</td>
+                            <td>${value['Posterior']}</td>
+                        </tr>`;
+                rowCount += 1;                
+            });
+            
+            console.log("the spiderCount is " + rowCount);
+            if ($.fn.dataTable.isDataTable('#spiderTable')) {
+                try {
+                    spidersTable.destroy();
+                } catch (e) {
+                }
+            }
+            else {
+                //$('#tblTasks').show();
+                //$('#tblTasks thead tr').clone(true).appendTo('#tblTasks thead');
+                //$('#tblTasks').hide();
+            }
+            $('#spiderTableBody').html(html);
+            spidersTable = $('#spiderTable').DataTable({
+                orderCellsTop: true,
+                pageLength: 10,
+                fixedColumns: {
+                    leftColumns: 3
+                },
+                language: {
+                    "emptyTable": "<p id='emptyDataTable'>No Characteristics Selected / Error Occured.</p>"
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="filters-wrapper">
+        <div id="filters">
+        </div>
+    </div>
+
+    <div class="result-wrapper">
+        <table id="spiderTable" class="display">
+            <thead>
+                <tr>
+                    <th>SNo.</th>
+                    <th>Species Name</th>
+                    <th>Probability</th>
+                </tr>
+            </thead>
+            <tbody id="spiderTableBody">
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+</html>
