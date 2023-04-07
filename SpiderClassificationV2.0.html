@@ -230,13 +230,7 @@
                 let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
                 let characteristicValue = event.target.value;            
                 console.log(characteristicKey, characteristicValue, nextPriors);
-                getSpidersForSelection(characteristicKey, characteristicValue);
-                disableCharacteristicKeyAndValue(characteristicKey, characteristicValue);
-            }
-
-            function disableCharacteristicKeyAndValue(selectedCharacteristicKey, selectedCharacteristicValue){
-                console.log(selectedCharacteristicKey, selectedCharacteristicValue);
-                let 
+                getSpidersForSelection(characteristicKey, characteristicValue)
             }
 
             function getSpidersForSelection(selectedKey, selectedValue){
@@ -308,7 +302,10 @@
                 if(deletingIndex != -1){
                     selectedCharacteristicKeys.splice(deletingIndex, 1)           
                 }
-                element.remove();                
+                element.remove(); 
+                if(document.getElementsByClassName('filter').length == 0){
+                    addFilter();
+                }               
             }
 
             function storePriors(rows){
