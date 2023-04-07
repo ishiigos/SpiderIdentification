@@ -133,6 +133,8 @@
                 "Distribution" : ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
             }
 
+            var selectedCharacteristicKeys = [];
+
             var nextPriors = {};
 
             var spidersTable;
@@ -153,8 +155,12 @@
                 return filterOptions.join('');
             }
 
+            function convertToCharacteristicKeyCompatibleName(characteristic){
+                return characteristic.replace("<", "&lt;").replace(">", "&gt;");
+            }
+
             function getCharacteristicsPossibleValues(characteristic){
-                let characteristicKey = characteristic.replace("<", "&lt;").replace(">", "&gt;");
+                let characteristicKey = convertToCharacteristicKeyCompatibleName(characteristic);
                 return allCharacteristics[characteristicKey];
             }
 
@@ -167,15 +173,35 @@
 
             function addFilter(){
                 let filtersElement = document.getElementById('filters');
-                var newFilter = document.createElement('div');
+                let newFilter = document.createElement('div');
                 newFilter.className = 'filter';
                 newFilter.innerHTML = createFilterInnerHtml();
                 filtersElement.appendChild(newFilter);
             }
 
+            function getCharacteristicKeysForOptions(){
+                let tempKeys = Object.keys(allCharacteristics);
+                if(selectedCharacteristicKeys.length > 0){
+                    return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(x));
+                }
+                else{
+                    return tempKeys;
+                }                
+            }
+
+            function recalculateForAllSelectedFilters(){
+                let selectedFilters = document.getElementsByClassName('filter');
+                nextPriors = {};
+                $.each(selectedFilters, function(index, value){
+                    let selectedKey = value.getElementsByClassName('characteristic-key')[0].children[0].value;
+                    let selectedValue = nextPriors.getElementsByClassName('characteristic-value')[0].children[0].value;
+                    getSpidersForSelection(selectedKey, selectedValue);
+                });
+            }
+
             function createFilterInnerHtml(){
                 return `<div class="characteristic-key dropdown-wrapper">
-                            ${generateDropDownOptionsHtml(Object.keys(allCharacteristics), "--Select Characteristic--", "onCharacteristicKeySelected")}
+                            ${generateDropDownOptionsHtml(getCharacteristicKeysForOptions(), "--Select Characteristic--", "onCharacteristicKeySelected")}
                         </div>
                         <div class="px-2"> = </div>
                         <div class="characteristic-value dropdown-wrapper">
@@ -224,6 +250,7 @@
                         console.dir(data);
                         storePriors(data);
                         populateSpiders(data);
+                        addSelectedCharacteristicKey(selectedKey);
                     },
                     error: function(error, data){
                         alert(error)
@@ -231,6 +258,12 @@
                         console.dir(data);
                     }
                 });
+            }
+
+            function addSelectedCharacteristicKey(characteristicKey){
+                if(characteristicKey != undefined && characteristicKey != ''){
+                    selectedCharacteristicKeys.push(characteristicKey);
+                }
             }
 
             function showDeleteConfirmation(event){            
@@ -270,8 +303,12 @@
                 event.stopPropagation();
             }
 
-            function removeFilterByElement(element){            
-                element.remove();
+            function removeFilterByElement(element){                 
+                let deletingIndex = selectedCharacteristicKeys.findIndex((key)=>key == element.getElementsByClassName('characteristic-key')[0].children[0].value);                
+                if(deletingIndex != -1){
+                    selectedCharacteristicKeys.splice(deletingIndex, 1)           
+                }
+                element.remove();                
             }
 
             function storePriors(rows){
