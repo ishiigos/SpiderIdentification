@@ -1,3 +1,4 @@
+import copy
 from flask import Flask, jsonify, request
 import bayes
 from flask_cors import CORS
@@ -17,7 +18,7 @@ def calculate_posterior():
     priors = request.json
     if allSpiders == None:
         allSpiders = bayes.get_all_spiders()    
-    response = bayes.calculate_posterior(allSpiders, key, value, priors)
+    response = bayes.calculate_posterior(copy.deepcopy(allSpiders), key, value, priors)
     return jsonify(response)
 
 if __name__ == '__main__':
