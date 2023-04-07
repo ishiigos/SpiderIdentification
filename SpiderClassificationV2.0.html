@@ -204,7 +204,13 @@
                 let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
                 let characteristicValue = event.target.value;            
                 console.log(characteristicKey, characteristicValue, nextPriors);
-                getSpidersForSelection(characteristicKey, characteristicValue)
+                getSpidersForSelection(characteristicKey, characteristicValue);
+                disableCharacteristicKeyAndValue(characteristicKey, characteristicValue);
+            }
+
+            function disableCharacteristicKeyAndValue(selectedCharacteristicKey, selectedCharacteristicValue){
+                console.log(selectedCharacteristicKey, selectedCharacteristicValue);
+                let 
             }
 
             function getSpidersForSelection(selectedKey, selectedValue){
