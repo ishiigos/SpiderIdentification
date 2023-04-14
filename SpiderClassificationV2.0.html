@@ -324,7 +324,7 @@
                 let selectedKey = selectedFilters[index - 1].getElementsByClassName('characteristic-key')[0].children[0].value;
                 let selectedValue = selectedFilters[index - 1].getElementsByClassName('characteristic-value')[0].children[0].value;
                 //Remove the last storedPriors so it can be re-calculated and displayed in the table
-                storePriors.splice(storedPriors.length - 1);
+                storedPriors.splice(storedPriors.length - 1);
                 getSpidersForSelection(selectedKey, selectedValue);
             }
             else{
