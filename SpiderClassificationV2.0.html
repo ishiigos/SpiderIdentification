@@ -1,442 +1,577 @@
 <html>
-    <head>
-        <title>Spider Identification Key</title>
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+<head>
+    <title>Spider Identification Key</title>
 
-        <style>
-            body{
-                background-image: linear-gradient(lightblue, white, white, white, white, white, white, white, white, white, white, white, white, lightblue);
-                background-attachment: fixed;
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <style>
+        body {
+            background-image: linear-gradient(lightblue, white, white, white, white, white, white, white, white, white, white, white, white, lightblue);
+            background-attachment: fixed;
+        }
+
+        .list-item {
+            margin: 2px;
+            border: 1px solid;
+        }
+
+        .list-item select {
+            width: 100%
+        }
+
+        .list {
+            overflow-y: auto;
+            height: 500px;
+            max-height: 500px;
+            border: 2px solid;
+        }
+
+        .left,
+        .right {
+            width: 40%
+        }
+
+        .left {
+            padding-right: 2%
+        }
+
+        .right>div:nth-child(n+2) {
+            padding-top: 1rem;
+        }
+
+        .lists-wrapper {
+            display: flex;
+            place-content: center;
+        }
+
+        .filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter:nth-child(n+2) {
+            padding-top: 0.5rem;
+        }
+
+        .result-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #spiderTable_wrapper {
+            width: 82%;
+        }
+
+        .dropdown-wrapper {
+            width: 14rem;
+            max-width: 14rem;
+        }
+
+        .btn-add {
+            visibility: hidden;
+        }
+
+        .filter:last-child .btn-add {
+            visibility: visible;
+        }
+
+        .delete-confirmation-wrapper {
+            display: none;
+        }
+
+        .btn-confirm-yes,
+        .btn-confirm-yes:hover {
+            color: red;
+        }
+
+        .remove-all {
+            background-color: rgb(255, 255, 255);
+            color: rgb(114, 1, 1);
+            border-width: 2px;
+            border-color: rgb(114, 1, 1);
+            height: 40px;
+            width: 100px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-right: 8px;
+            visibility: hidden;
+        }
+
+        .filter:last-child .remove-all {
+            visibility: visible;
+        }
+
+        .remove-all:hover {
+            opacity: 0.7;
+        }
+
+        .remove-all:active {
+            opacity: 0.5;
+        }
+
+        /* Chart css */
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node text {
+            font-size: 12px;
+            font-family: sans-serif;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .node--root circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+        const allCharacteristics = {
+            "Sex": ["Male", "Female"],
+            "Overall Appearance": ["inconspicuous, generally dark", "bright, red, orange", "conspicuous contrast legs/prosoma", "pale, ground or cave dweller"],
+            "Length of femur I :&lt;relative to prosoma&gt;": ["equal in length", "longer than prosoma", "shorter than prosoma"],
+            "Prosoma &lt;appearance&gt;": ["inconspicuous", "margins with teeth", "with conspicuous hairs/spines", "with pits (dorsally)"],
+            "Fovea as darkened groove": ["yes", "no"],
+            "Opisthosoma &lt;appearance&gt;": ["conspicuously hairy", "patterned", "unicolourous, inconspicuous", "with scutum"],
+            "Dorsal spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
+            "Posterior eye row: &lt;form&gt;": ["procurved", "recurved", "straight"],
+            "Posterior median eye (PME) separation: &lt;relative to diameter (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
+            "Headregion of male: &lt;appearance&gt;": ["complex", "inconspicuous", "sulci present", "with lobe (simple)", "with horns/tufts"],
+            "Eyes: &lt;appearance&gt;": ["normal", "reduced"],
+            "Anterior median eyes: &lt;size relative to anterior lateral eyes ALE&gt;": ["about the same as ALE", "distinctly larger than ALE", "distinctly smaller than ALE"],
+            "Prolateral spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
+            "Prolateral spines on tibia I: &lt;count&gt;": ["multiple", "none", "one"],
+            "Anterior cheliceral teeth: &lt;appearance&gt;": ["conspicuously large", "unremarkable in size"],
+            "Conspicuous structures on chelicerae: &lt;appearance&gt;": ["apophyses/teeth-like processes/tubercles", "none", "spines"],
+            "Maxillae: &lt;appearance&gt;": ["one or more teeth/tubercles", "unremarkable"],
+            "Sternum: &lt;appearance&gt;": ["pitted", "rugose", "smooth"],
+            "Sternum: &lt;extends between coxae IV&gt;": ["yes", "no"],
+            "Width of sternum between coxae IV: &lt;relative to width of coxae IV (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
+            "Position of TmI by range: &lt;relative to metatarsus&gt;": ["0.10-0.19", "0.20-0.29", "0.30-0.39", "0.40-0.49", "0.50-0.59", "0.60-0.69", "0.70-0.79", "0.80-0.89", "0.90-0.98"],
+            "Metatarsus IV dorsally: &lt;presence of trichobothrium (TmIV)&gt;": [" trichobothrium present", "trichobothrium absent"],
+            "Dorsal spines on metatarsus I: &lt;count&gt;": ["multiple", "none", "one"],
+            "Tibia IV: &lt;number of dorsal spines&gt;": ["one dorsal spine", "two dorsal spines"],
+            "Numbers of dorsal spines on tibia I, II, III, IV: &lt;tibial spine formula&gt;": ["0", "11", "1111", "2211", "2221", "2222"],
+            "Tibia I-II ventrally: &lt;presence of spines&gt;": ["no spines", "stout spines in two rows"],
+            "Male pedipalp: femur &lt;appearance&gt;": ["unremarkable", "conspicuous"],
+            "Male pedipalp: patella &lt;appearance&gt;": ["conspicuously swollen", "unremarkable", "with apophyses", "with conspicuous spines (single or tufts)"],
+            "Male pedipalp: tibia &lt;appearance&gt;": ["unremarkable", "with complex apophysis", "with multiple, complex apophysis", "with multiple, simple apophysis", "with one or more spines", "with simple apophysis", "with tufts of hair or spines"],
+            "Male pedipalp: cymbium &lt;appearance&gt;": ["margin with notches/bulges", "bulges", "with doesal projections/conical elevations"],
+            "Male pedipalp: paracymbium &lt;form&gt;": ["complex", "simple"],
+            "Male pedipalp: branches of paracymbium &lt;presence of teeth&gt;": ["teeth absent", "teeth present"],
+            "Male pedipalp: embolus &lt;appearance&gt;": ["conspicuous, circular", "conspicuous, curled", "unremarkable"],
+            "Male pedipalp: lamella characteristica &lt;presence&gt;": ["absent", "conspicuous"],
+            "Female palp: claw &lt;presence&gt;": ["conspicuous", "not present/ inconspicuous"],
+            "Epigyne: &lt;form&gt;": ["flat", "protrudes"],
+            "Epigyne: &lt;seminal receptacles&gt;": ["underlying structures (e.g., seminal receptacles) not visible", "underlying structures (e.g., seminal receptacles) visible"],
+            "Distribution": ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
+        }
+
+        const selectCharacteristicsText = '--Select Characteristic--';
+        var selectedCharacteristicKeys = [];
+
+        var priorCharacteristicKeys = [];
+
+        //Stored priors has index 0 as the default values
+        var storedPriors = [];
+        //var nextPriors = {};
+
+        var spidersTable;       
+
+        var svg;
+        var diameter;
+        var bubble;
+
+        class Prior{
+            constructor(characteristicKey, prior) {
+                this.characteristicKey = characteristicKey;
+                this.prior = prior;
             }
-            .list-item {
-                margin: 2px;
-                border: 1px solid;
-            }
+        }
 
-            .list-item select {
-                width: 100%
-            }
+        function initialiseBubbleChart() {
+            svg = d3.select("svg");
+            diameter = +svg.attr("height");
+            bubble = d3.pack()
+                .size([diameter, diameter])
+                .padding(1.5);
+        }
 
-            .list {
-                overflow-y: auto;
-                height: 500px;
-                max-height: 500px;
-                border: 2px solid;
-            }
+        function generateBubbleChart() {
 
-            .left,
-            .right {
-                width: 40%
-            }
+            let data = [
+                { name: "A", value: 0.5 },
+                { name: "B", value: 0.2 },
+                { name: "C", value: 0.0006 },
+            ];
 
-            .left {
-                padding-right: 2%
-            }
-
-            .right>div:nth-child(n+2) {
-                padding-top: 1rem;
-            }
-
-            .lists-wrapper {
-                display: flex;
-                place-content: center;
-            }
-
-            .filter{
-                display: flex;
-                align-items: center;
-            }
-
-            .filter:nth-child(n+2){
-                padding-top: 0.5rem;
-            }
-
-            .result-wrapper {
-                display: flex;
-                justify-content: center;
-            }
-
-            #spiderTable_wrapper {
-                width: 82%;
-            }
-
-            .dropdown-wrapper{
-                width:14rem;
-                max-width:14rem;
-            }
-
-            .btn-add{
-                visibility: hidden;
-            }
-
-            .filter:last-child .btn-add{
-                visibility: visible;
-            }
-
-            .delete-confirmation-wrapper{
-                display: none;
-            }
-
-            .btn-confirm-yes, .btn-confirm-yes:hover{
-                color:red;
-            }
-            
-            .remove-all{
-                background-color: rgb(255, 255, 255);
-                color: rgb(114, 1, 1);
-                border-width: 2px;
-                border-color: rgb(114, 1, 1);
-                height: 40px;
-                width: 100px;
-                border-radius: 20px;
-                cursor: pointer;
-                margin-right: 8px;
-                visibility: hidden;
-            }
-
-            .filter:last-child .remove-all{
-                visibility: visible;
-            }
-            
-            .remove-all:hover { 
-                opacity: 0.7;
-            }
-        
-            .remove-all:active { 
-                opacity: 0.5;
-            }
-        
-        </style>   
-        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
-        <script src="https://code.jquery.com/jquery-3.6.4.js"
-            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-
-        <script>
-            const allCharacteristics = {
-                "Sex": ["Male", "Female"],
-                "Overall Appearance" : ["inconspicuous, generally dark", "bright, red, orange", "conspicuous contrast legs/prosoma", "pale, ground or cave dweller"],
-                "Length of femur I :&lt;relative to prosoma&gt;" : ["equal in length", "longer than prosoma", "shorter than prosoma"],
-                "Prosoma &lt;appearance&gt;" : ["inconspicuous", "margins with teeth", "with conspicuous hairs/spines", "with pits (dorsally)"],
-                "Fovea as darkened groove" : ["yes", "no"],
-                "Opisthosoma &lt;appearance&gt;" : ["conspicuously hairy", "patterned", "unicolourous, inconspicuous", "with scutum"],
-                "Dorsal spines on femur I: &lt;count&gt;" : ["multiple", "none", "one"],
-                "Posterior eye row: &lt;form&gt;" : ["procurved", "recurved", "straight"],
-                "Posterior median eye (PME) separation: &lt;relative to diameter (d)&gt;" : ["distinctly greater than d", "distinctly less than d", "equal to d"],
-                "Headregion of male: &lt;appearance&gt;" : ["complex", "inconspicuous", "sulci present", "with lobe (simple)", "with horns/tufts"],
-                "Eyes: &lt;appearance&gt;" : ["normal", "reduced"],
-                "Anterior median eyes: &lt;size relative to anterior lateral eyes ALE&gt;" : ["about the same as ALE", "distinctly larger than ALE", "distinctly smaller than ALE"],
-                "Prolateral spines on femur I: &lt;count&gt;" : ["multiple", "none", "one"],
-                "Prolateral spines on tibia I: &lt;count&gt;" : ["multiple", "none", "one"],
-                "Anterior cheliceral teeth: &lt;appearance&gt;" : ["conspicuously large", "unremarkable in size"],
-                "Conspicuous structures on chelicerae: &lt;appearance&gt;" : ["apophyses/teeth-like processes/tubercles", "none", "spines"],
-                "Maxillae: &lt;appearance&gt;" : ["one or more teeth/tubercles", "unremarkable"],
-                "Sternum: &lt;appearance&gt;" : ["pitted", "rugose", "smooth"],
-                "Sternum: &lt;extends between coxae IV&gt;" : ["yes", "no"],
-                "Width of sternum between coxae IV: &lt;relative to width of coxae IV (d)&gt;" : ["distinctly greater than d", "distinctly less than d", "equal to d"],
-                "Position of TmI by range: &lt;relative to metatarsus&gt;" : ["0.10-0.19", "0.20-0.29", "0.30-0.39", "0.40-0.49", "0.50-0.59", "0.60-0.69", "0.70-0.79", "0.80-0.89", "0.90-0.98"],
-                "Metatarsus IV dorsally: &lt;presence of trichobothrium (TmIV)&gt;" : [" trichobothrium present",  "trichobothrium absent"],
-                "Dorsal spines on metatarsus I: &lt;count&gt;" : ["multiple", "none", "one"],
-                "Tibia IV: &lt;number of dorsal spines&gt;" : ["one dorsal spine", "two dorsal spines"],
-                "Numbers of dorsal spines on tibia I, II, III, IV: &lt;tibial spine formula&gt;" : ["0", "11", "1111", "2211", "2221", "2222"],
-                "Tibia I-II ventrally: &lt;presence of spines&gt;" : ["no spines", "stout spines in two rows"], 
-                "Male pedipalp: femur &lt;appearance&gt;" : ["unremarkable", "conspicuous"],
-                "Male pedipalp: patella &lt;appearance&gt;" : ["conspicuously swollen", "unremarkable", "with apophyses", "with conspicuous spines (single or tufts)"],
-                "Male pedipalp: tibia &lt;appearance&gt;" : ["unremarkable", "with complex apophysis", "with multiple, complex apophysis", "with multiple, simple apophysis", "with one or more spines", "with simple apophysis", "with tufts of hair or spines"],
-                "Male pedipalp: cymbium &lt;appearance&gt;" : ["margin with notches/bulges", "bulges", "with doesal projections/conical elevations"],
-                "Male pedipalp: paracymbium &lt;form&gt;" : ["complex", "simple"],
-                "Male pedipalp: branches of paracymbium &lt;presence of teeth&gt;" : ["teeth absent", "teeth present"],
-                "Male pedipalp: embolus &lt;appearance&gt;" : ["conspicuous, circular", "conspicuous, curled", "unremarkable"],
-                "Male pedipalp: lamella characteristica &lt;presence&gt;" : ["absent", "conspicuous"],
-                "Female palp: claw &lt;presence&gt;" : ["conspicuous", "not present/ inconspicuous"],
-                "Epigyne: &lt;form&gt;" : ["flat", "protrudes"], 
-                "Epigyne: &lt;seminal receptacles&gt;" : ["underlying structures (e.g., seminal receptacles) not visible", "underlying structures (e.g., seminal receptacles) visible"],
-                "Distribution" : ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
-            }
-
-            var selectedCharacteristicKeys = [];
-
-            var nextPriors = {};
-
-            var spidersTable;
-
-            $(document).ready(function () {
-                addFilter();
-                getSpidersForSelection('', '');
-            });
-
-            function generateDropDownOptionsHtml(options, defaultText, onChangeFunctionName){
-                let filterOptions = [];
-                filterOptions.push(`<select onchange="${onChangeFunctionName}(event)" class="form-select">`);
-                filterOptions.push(`<option>${defaultText}</option>`);
-                options.forEach(option => {
-                    filterOptions.push(`<option value="${option}">${option}</option>`);
-                });    
-                filterOptions.push('</select>');  
-                return filterOptions.join('');
-            }
-
-            function convertToCharacteristicKeyCompatibleName(characteristic){
-                return characteristic.replace("<", "&lt;").replace(">", "&gt;");
-            }
-
-            function getCharacteristicsPossibleValues(characteristic){
-                let characteristicKey = convertToCharacteristicKeyCompatibleName(characteristic);
-                return allCharacteristics[characteristicKey];
-            }
-
-            function onCharacteristicKeySelected(event){
-                event.srcElement.children[0].disabled = true;
-                let selectedValue = event.target.value;
-                let characteristicValues = getCharacteristicsPossibleValues(selectedValue);
-                let characteristicValuesOptions = generateDropDownOptionsHtml(characteristicValues, "--Select Value--", "selectCharacteristicValue");
-                event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
-            }
-
-            function addFilter(){
-                let filtersElement = document.getElementById('filters');
-                let newFilter = document.createElement('div');
-                newFilter.className = 'filter';
-                newFilter.innerHTML = createFilterInnerHtml();
-                filtersElement.appendChild(newFilter);
-            }
-
-            function getCharacteristicKeysForOptions(){
-                let tempKeys = Object.keys(allCharacteristics);
-                if(selectedCharacteristicKeys.length > 0){
-                    return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(x));
-                }
-                else{
-                    return tempKeys;
-                }                
-            }
-
-            function recalculateForAllSelectedFilters(){
-                let selectedFilters = document.getElementsByClassName('filter');
-                nextPriors = {};
-                $.each(selectedFilters, function(index, value){
-                    let selectedKey = value.getElementsByClassName('characteristic-key')[0].children[0].value;
-                    let selectedValue = nextPriors.getElementsByClassName('characteristic-value')[0].children[0].value;
-                    getSpidersForSelection(selectedKey, selectedValue);
+            let root = d3.hierarchy({ children: data })
+                .sum(function (d) { return d.value; })
+                .each(function (d) {
+                    if (id = d.data.name) {
+                        var id, i = id.lastIndexOf(".");
+                        d.id = id;
+                        d.package = id.slice(0, i);
+                        d.class = id.slice(i + 1);
+                    }
                 });
-            }
 
-            function createFilterInnerHtml(){
-                return `<div class="characteristic-key dropdown-wrapper">
-                            ${generateDropDownOptionsHtml(getCharacteristicKeysForOptions(), "--Select Characteristic--", "onCharacteristicKeySelected")}
-                        </div>
-                        <div class="px-2"> = </div>
-                        <div class="characteristic-value dropdown-wrapper">
-                            <select class="form-select"></select>
-                        </div>
-                        <div class="add-delete-filter-wrapper">
-                            <button class="btn btn-add" onclick="addFilter(event)">
-                                <i class="bi bi-plus-circle"></i>
-                            </button>
-                            <button class="btn text-danger btn-delete" onclick="showDeleteConfirmation(event)">
-                                <i class="bi bi-trash3-fill" onclick="showDeleteConfirmationByIcon(event)"></i>
-                            </button>
-                        </div>
-                        <div class="delete-confirmation-wrapper">
-                            <button class="btn btn-confirm-yes" onclick="removeFilter(event)">
-                                <i class="bi bi-check-square" onclick="removeFilterByIcon(event)"></i>
-                            </button>
-                            <button class="btn btn-confirm-no" onclick="cancelDeleteFilterOperation(event)">
-                                <i class="bi bi-x-square" onclick="cancelDeleteFilterOperationByIcon(event)"></i>
-                            </button>
-                        </div>
-                        <div class = "remove-all-button">
-                            <button class="remove-all" onclick="removeAll(event)">Remove All
-                            </button>
-                        </div>`;
-            }
+            let nodes = bubble(root).descendants();
 
-            function selectCharacteristicValue(event){
-                console.dir(event);
-                let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
-                let characteristicValue = event.target.value;            
-                console.log(characteristicKey, characteristicValue, nextPriors);
-                getSpidersForSelection(characteristicKey, characteristicValue, event);
-            }
+            let node = svg.selectAll(".node")
+                .data(nodes)
+                .enter().filter(function (d) { return !d.children; })
+                .append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-            function disableCharacteristicKeyAndValue(event){
+            node.append("title")
+                .text(function (d) { return d.id + "\n" + d.value; });
+
+            node.append("circle")
+                .attr("r", function (d) { return d.r; })
+                .transition() // add transition
+                .duration(1000) // set duration in ms
+                .attr("r", function (d) { return d.r * 1.5; }); // increase bubble size
+
+            node.append("text")
+                .attr("dy", ".3em")
+                .text(function (d) { return d.data.name; });
+        }
+
+
+        $(document).ready(function () {
+            addFilter();
+            getSpidersForSelection('', '');
+            initialiseBubbleChart();
+        });        
+
+        function generateDropDownOptionsHtml(options, defaultText, onChangeFunctionName) {
+            let filterOptions = [];
+            filterOptions.push(`<select onchange="${onChangeFunctionName}(event)" class="form-select">`);
+            filterOptions.push(`<option>${defaultText}</option>`);
+            options.forEach(option => {
+                filterOptions.push(`<option value="${option}">${option}</option>`);
+            });
+            filterOptions.push('</select>');
+            return filterOptions.join('');
+        }
+
+        function convertToCharacteristicKeyHtmlCompatibleName(characteristic) {
+            return characteristic.replace("<", "&lt;").replace(">", "&gt;");
+        }
+
+        function convertToCharacteristicKeyNormalName(characteristic) {
+            return characteristic.replace("&lt;", "<").replace("&gt;", ">");
+        }
+
+        function getCharacteristicsPossibleValues(characteristic) {
+            let characteristicKey = convertToCharacteristicKeyHtmlCompatibleName(characteristic);
+            return allCharacteristics[characteristicKey];
+        }
+
+        function onCharacteristicKeySelected(event) {
+            event.srcElement.children[0].disabled = true;
+            let selectedValue = event.target.value;
+            let characteristicValues = getCharacteristicsPossibleValues(selectedValue);
+            let characteristicValuesOptions = generateDropDownOptionsHtml(characteristicValues, "--Select Value--", "selectCharacteristicValue");
+            event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
+        }
+
+        function addFilter() {
+            let filtersElement = document.getElementById('filters');
+            let newFilter = document.createElement('div');
+            newFilter.className = 'filter';
+            newFilter.innerHTML = createFilterInnerHtml();
+            filtersElement.appendChild(newFilter);
+        }
+
+        function getCharacteristicKeysForOptions() {
+            let tempKeys = Object.keys(allCharacteristics);
+            if (selectedCharacteristicKeys.length > 0) {
+                return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(convertToCharacteristicKeyNormalName(x)));
+            }
+            else {
+                return tempKeys;
+            }
+        }
+
+        //this is not being used
+        function recalculateForFiltersAfterIndex(index) {
+            let selectedFilters = document.getElementsByClassName('filter');
+            if(index == selectedFilters.length){
+                let selectedKey = selectedFilters[index - 1].getElementsByClassName('characteristic-key')[0].children[0].value;
+                let selectedValue = selectedFilters[index - 1].getElementsByClassName('characteristic-value')[0].children[0].value;
+                //Remove the last storedPriors so it can be re-calculated and displayed in the table
+                storePriors.splice(storedPriors.length - 1);
+                getSpidersForSelection(selectedKey, selectedValue);
+            }
+            else{
+                for(let i = index; i < selectedFilters.length; i++){
+                    let selectedKey = selectedFilters[i].getElementsByClassName('characteristic-key')[0].children[0].value;
+                    let selectedValue = selectedFilters[i].getElementsByClassName('characteristic-value')[0].children[0].value;
+                    getSpidersForSelection(selectedKey, selectedValue);
+                }
+            }
+        }
+
+        function createFilterInnerHtml() {
+            return `<div class="characteristic-key dropdown-wrapper">
+                        ${generateDropDownOptionsHtml(getCharacteristicKeysForOptions(), selectCharacteristicsText, "onCharacteristicKeySelected")}
+                    </div>
+                    <div class="px-2"> = </div>
+                    <div class="characteristic-value dropdown-wrapper">
+                        <select class="form-select"></select>
+                    </div>
+                    <div class="add-delete-filter-wrapper">
+                        <button class="btn btn-add" onclick="addFilter(event)">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                        <button class="btn text-danger btn-delete" onclick="showDeleteConfirmation(event)">
+                            <i class="bi bi-trash3-fill" onclick="showDeleteConfirmationByIcon(event)"></i>
+                        </button>
+                    </div>
+                    <div class="delete-confirmation-wrapper">
+                        <button class="btn btn-confirm-yes" onclick="removeFilter(event)">
+                            <i class="bi bi-check-square" onclick="removeFilterByIcon(event)"></i>
+                        </button>
+                        <button class="btn btn-confirm-no" onclick="cancelDeleteFilterOperation(event)">
+                            <i class="bi bi-x-square" onclick="cancelDeleteFilterOperationByIcon(event)"></i>
+                        </button>
+                    </div>
+                    <div class="remove-all-button">
+                        <button class="remove-all" onclick="removeAll(event)">Remove All
+                        </button>
+                    </div>`;
+        }
+
+        function selectCharacteristicValue(event) {
+            console.dir(event);
+            let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
+            let characteristicValue = event.target.value;
+            getSpidersForSelection(characteristicKey, characteristicValue, event)
+        }
+
+        function disableCharacteristicKeyAndValue(event) {
+            if(event != undefined){
                 event.srcElement.parentElement.parentElement.children[0].children[0].disabled = true;
                 event.target.disabled = true;
             }
+        }
 
-            function showAddAfterSelection(event){
+        function showAddAfterSelection(event) {
 
+        }
+
+        function getSpidersForSelection(selectedKey, selectedValue, event) {
+            let prior = {};
+            if (storedPriors.length > 0) {
+                prior = storedPriors[storedPriors.length - 1].prior;
             }
-            function getSpidersForSelection(selectedKey, selectedValue, event){
-                $.ajax({
-                    url:`http://127.0.0.1:5000/api/v1/calculate_posterior?key=${selectedKey}&value=${selectedValue}`,
-                    dataType:'json',
-                    type: 'POST',
-                    contentType: "application/json",
-                    data:JSON.stringify(nextPriors),
-                    success: function(data){
-                        console.dir(data);
-                        storePriors(data);
-                        populateSpiders(data);
+            $.ajax({
+                url: `http://127.0.0.1:5000/api/v1/calculate_posterior?key=${selectedKey}&value=${selectedValue}`,
+                dataType: 'json',
+                type: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify(prior),
+                success: function (data) {
+                    if(selectedKey != selectCharacteristicsText){
+                        storePriors(selectedKey, data);
                         addSelectedCharacteristicKey(selectedKey);
                         disableCharacteristicKeyAndValue(event);
-                        showAddAfterSelection(event);
-                    },
-                    error: function(error, data){
-                        alert(error)
-                        console.dir(error);
-                        console.dir(data);
                     }
-                });
-            }
-
-            function addSelectedCharacteristicKey(characteristicKey){
-                if(characteristicKey != undefined && characteristicKey != ''){
-                    selectedCharacteristicKeys.push(characteristicKey);
+                    populateSpiders(data);
+                    showAddAfterSelection(event);
+                    generateBubbleChart(data);
+                },
+                error: function (error, data) {
+                    alert(error)
+                    console.dir(error);
+                    console.dir(data);
                 }
+            });
+            
+        }
+
+        function addSelectedCharacteristicKey(characteristicKey) {
+            if (characteristicKey != undefined && characteristicKey != '') {
+                selectedCharacteristicKeys.push(characteristicKey);
             }
+        }
 
-            function showDeleteConfirmation(event){            
-                showDeleteConfirmationByElement(event.srcElement.parentElement.parentElement);
+        function showDeleteConfirmation(event) {
+            showDeleteConfirmationByElement(event.srcElement.parentElement.parentElement);
+        }
+
+        function showDeleteConfirmationByIcon(event) {
+            showDeleteConfirmationByElement(event.srcElement.parentElement.parentElement.parentElement);
+            event.stopPropagation();
+        }
+
+        function cancelDeleteFilterOperation(event) {
+            hideDeleteConfirmationByElement(event.srcElement.parentElement.parentElement);
+        }
+
+        function cancelDeleteFilterOperationByIcon(event) {
+            hideDeleteConfirmationByElement(event.srcElement.parentElement.parentElement.parentElement);
+            event.stopPropagation();
+        }
+
+        function showDeleteConfirmationByElement(element) {
+            element.getElementsByClassName('add-delete-filter-wrapper')[0].style.display = 'none'
+            element.getElementsByClassName('delete-confirmation-wrapper')[0].style.display = 'block';
+        }
+
+        function hideDeleteConfirmationByElement(element) {
+            element.getElementsByClassName('add-delete-filter-wrapper')[0].style.display = 'block'
+            element.getElementsByClassName('delete-confirmation-wrapper')[0].style.display = 'none';
+        }
+
+        function removeFilter(event) {
+            removeFilterByElement(event.srcElement.parentElement.parentElement);
+        }
+
+        function removeFilterByIcon(event) {
+            removeFilterByElement(event.srcElement.parentElement.parentElement.parentElement);
+            event.stopPropagation();
+        }
+
+        function removeFilterByElement(element) {
+            let deletingIndex = selectedCharacteristicKeys.findIndex((key) => key == element.getElementsByClassName('characteristic-key')[0].children[0].value);
+            if (deletingIndex != -1) {
+                selectedCharacteristicKeys.splice(deletingIndex, 1);                
             }
-
-            function showDeleteConfirmationByIcon(event){            
-                showDeleteConfirmationByElement(event.srcElement.parentElement.parentElement.parentElement);
-                event.stopPropagation();     
-            }            
-
-            function cancelDeleteFilterOperation(event){
-                hideDeleteConfirmationByElement(event.srcElement.parentElement.parentElement);
+            let deletingStoredPriorsIndex = storedPriors.findIndex((prior) => prior.characteristicKey == element.getElementsByClassName('characteristic-key')[0].children[0].value);
+            if(deletingStoredPriorsIndex != -1){
+                removeStoredPriorsFromIndex(deletingStoredPriorsIndex);
             }
-
-            function cancelDeleteFilterOperationByIcon(event){
-                hideDeleteConfirmationByElement(event.srcElement.parentElement.parentElement.parentElement);
-                event.stopPropagation();
+            element.remove();
+            if (document.getElementsByClassName('filter').length == 0) {
+                addFilter();
             }
+            recalculateForFiltersAfterIndex(deletingStoredPriorsIndex - 1);
+        }
 
-            function showDeleteConfirmationByElement(element){
-                element.getElementsByClassName('add-delete-filter-wrapper')[0].style.display = 'none'
-                element.getElementsByClassName('delete-confirmation-wrapper')[0].style.display = 'block';       
-            }
+        function removeStoredPriorsFromIndex(index){
+            storedPriors = storedPriors.splice(0, index);
+        }
 
-            function hideDeleteConfirmationByElement(element){
-                element.getElementsByClassName('add-delete-filter-wrapper')[0].style.display = 'block'
-                element.getElementsByClassName('delete-confirmation-wrapper')[0].style.display = 'none';  
-            }            
+        function removeAll(event) {
+            location.reload();
+        }
 
-            function removeFilter(event){            
-                removeFilterByElement(event.srcElement.parentElement.parentElement);
-            }
+        function storePriors(characteristicKey, rows) {
+            let prior = {};
+            $.each(rows, function (index, value) {
+                prior[value['Species Name']] = value['Posterior']
+            });            
+            storedPriors.push(new Prior(characteristicKey, prior));
+        }
 
-            function removeFilterByIcon(event){            
-                removeFilterByElement(event.srcElement.parentElement.parentElement.parentElement);
-                event.stopPropagation();
-            }
-
-            function removeFilterByElement(element){                 
-                let deletingIndex = selectedCharacteristicKeys.findIndex((key)=>key == element.getElementsByClassName('characteristic-key')[0].children[0].value);                
-                if(deletingIndex != -1){
-                    selectedCharacteristicKeys.splice(deletingIndex, 1)           
-                }
-                element.remove(); 
-                if(document.getElementsByClassName('filter').length == 0){
-                    addFilter();
-                }               
-            }
-
-            function removeAll(event){
-                location.reload();
-            }
-
-            function storePriors(rows){
-                $.each(rows, function (index, value) {
-                    nextPriors[value['Species Name']] = value['Posterior']
-                });
-            }
-
-            function populateSpiders(rows) {
-                //ajax.showProgressBar;
-                let html = '';
-                let temp = '';
-                let rowCount = 1;
-                //alert('the total no of rows are ' + rows.length);
-                $.each(rows, function (index, value) {
-                    console.log(index, value)
-                    html += `<tr>
+        function populateSpiders(rows) {
+            //ajax.showProgressBar;
+            let html = '';
+            let temp = '';
+            let rowCount = 1;
+            //alert('the total no of rows are ' + rows.length);
+            $.each(rows, function (index, value) {
+                console.log(index, value)
+                html += `<tr>
                                 <td>${rowCount}</td>
                                 <td>${value['Species Name']}</td>
                                 <td>${value['Posterior']}</td>
                             </tr>`;
-                    rowCount += 1;                
-                });
-                
-                console.log("the spiderCount is " + rowCount);
-                if ($.fn.dataTable.isDataTable('#spiderTable')) {
-                    try {
-                        spidersTable.destroy();
-                    } catch (e) {
-                    }
-                }
-                else {
-                    //$('#tblTasks').show();
-                    //$('#tblTasks thead tr').clone(true).appendTo('#tblTasks thead');
-                    //$('#tblTasks').hide();
-                }
-                $('#spiderTableBody').html(html);
-                spidersTable = $('#spiderTable').DataTable({
-                    orderCellsTop: true,
-                    pageLength: 10,
-                    fixedColumns: {
-                        leftColumns: 3
-                    },
-                    language: {
-                        "emptyTable": "<p id='emptyDataTable'>No Characteristics Selected / Error Occured.</p>"
-                    }
-                });
-            }
-        </script>
-    </head>
+                rowCount += 1;
+            });
 
-    <body>
-        <section class="px-3 pt-3">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-search-spider-tab" data-bs-toggle="tab" data-bs-target="#nav-search-spider" type="button" role="tab" aria-controls="nav-search-spider" aria-selected="true"><i class="bi bi-search"></i> Spiders</button>
-                    <button class="nav-link" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="false">Info</button>
-                </div>
-            </nav>
-            <div class="pt-3 tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-search-spider" role="tabpanel" aria-labelledby="nav-search-spider-tab">
-                    <div class="filters-wrapper">
-                        <div id="filters">
-                        </div>
+            console.log("the spiderCount is " + rowCount);
+            if ($.fn.dataTable.isDataTable('#spiderTable')) {
+                try {
+                    spidersTable.destroy();
+                } catch (e) {
+                }
+            }
+            else {
+                //$('#tblTasks').show();
+                //$('#tblTasks thead tr').clone(true).appendTo('#tblTasks thead');
+                //$('#tblTasks').hide();
+            }
+            $('#spiderTableBody').html(html);
+            spidersTable = $('#spiderTable').DataTable({
+                orderCellsTop: true,
+                pageLength: 10,
+                fixedColumns: {
+                    leftColumns: 3
+                },
+                language: {
+                    "emptyTable": "<p id='emptyDataTable'>No Characteristics Selected / Error Occured.</p>"
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <section class="px-3 pt-3">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-search-spider-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-search-spider" type="button" role="tab" aria-controls="nav-search-spider"
+                    aria-selected="true"><i class="bi bi-search"></i> Spiders</button>
+                <button class="nav-link" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button"
+                    role="tab" aria-controls="nav-info" aria-selected="false">Info</button>
+            </div>
+        </nav>
+        <div class="pt-3 tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-search-spider" role="tabpanel"
+                aria-labelledby="nav-search-spider-tab">
+                <div class="filters-chart-wrapper">
+                    <div id="filters">
                     </div>
-                    <div class="pt-3 result-wrapper">
-                        <table id="spiderTable" class="display">
-                            <thead>
-                                <tr>
-                                    <th>SNo.</th>
-                                    <th>Species Name</th>
-                                    <th>Probability</th>
-                                </tr>
-                            </thead>
-                            <tbody id="spiderTableBody">
-                            </tbody>
-                        </table>
+                    <div style="display: none;">
+                        <svg width="960" height="600"></svg>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">Info page for the code</div>
-            </div>            
-        </section>
-    </body>
+
+                <div class="pt-3 result-wrapper">
+                    <table id="spiderTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>SNo.</th>
+                                <th>Species Name</th>
+                                <th>Probability</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spiderTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">Info page for the
+                code</div>
+        </div>
+    </section>
+</body>
+
 </html>
