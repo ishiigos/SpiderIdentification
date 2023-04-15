@@ -10,9 +10,43 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <style>
-        body {
-            background-image: linear-gradient(lightblue, white, white, white, white, white, white, white, white, white, white, white, white, lightblue);
-            background-attachment: fixed;
+        :root{
+            --light-yellow-green:#fef9db;
+            --light-lime:#abd699;
+            --fresh-lemon:#ffe26a;
+            --teal:#75c9b7;
+            --mint:#c7ddcc;
+            --navy:#16123f;
+            --dark-grey:#9e9e9e;
+        }
+
+        /* body {
+            background-color: var(--light-yellow-green);
+        } */
+        .header{
+            background-color: var(--light-lime);
+            padding: 0.5rem;
+            color: var(--navy);
+        }
+
+        select.form-select:disabled {
+            background-color: var(--dark-grey);    
+        }
+
+        .bg-light-lime{
+            background-color: var(--light-lime);   
+        }
+
+        .bg-teal{
+            background-color: var(--teal);   
+        }
+
+        .bg-light-yellow-green{
+            background-color: var(--light-yellow-green);   
+        }
+
+        .bg-mint{
+            background-color: var(--mint);   
         }
 
         .list-item {
@@ -116,6 +150,16 @@
 
         .medium-height {
             height: 600px;
+        }
+
+        /*Chart summary*/
+        #chart-summary{
+            display:none;
+        }
+
+        #chart-summary-tbody td{
+            padding: 0.5rem;
+            padding-right: 1rem;
         }
 
         /* Chart css */
@@ -229,7 +273,7 @@
                     .padding(1.5);
         }
 
-        function generateBubbleChart(priors) {
+        function generateBubbleChartAndDisplaySummary(priors) {
             let data = [];
 
             // Create data array and sort in descending order of value
@@ -279,9 +323,31 @@
             // Update the titles in the bubbles
             nodeUpdate.select("title")
                 .text(function (d) { return d.data.name + "\n" + d.value; });
+
+            displayBubbleChartSummary(priors);
         }
 
+        function displayBubbleChartSummary(priors){
+            let posteriorWithCounts = priors.reduce((dict, obj) => {
+                let posteriorValue = obj.Posterior;
+                let count = dict[posteriorValue] || 0;
+                dict[posteriorValue] = count + 1;
+                return dict;
+                }, {});
 
+            let htmlArray = [];
+            for(let posteriorCount in posteriorWithCounts){
+                htmlArray.push(`<tr>
+                                    <td>${posteriorCount}</td>
+                                    <td>${posteriorWithCounts[posteriorCount]}</td>
+                                </tr>`);
+            }
+            document.getElementById('chart-summary-tbody').innerHTML = htmlArray.join('');
+            if(htmlArray.length > 0)
+                document.getElementById('chart-summary').style.display = 'block';
+            else
+                document.getElementById('chart-summary').style.display = 'none';
+        }
 
         $(document).ready(function () {
             addFilter();
@@ -340,7 +406,6 @@
             }
         }
 
-        //this is not being used
         function recalculateForFiltersAfterIndex(index) {
             let selectedFilters = document.getElementsByClassName('filter');
             if (index == selectedFilters.length) {
@@ -427,7 +492,7 @@
                     populateSpiders(data);
                     showAddAfterSelection(event);
                     //if(selectedCharacteristicKeys.length > 1)
-                    generateBubbleChart(data);
+                    generateBubbleChartAndDisplaySummary(data);
                 },
                 error: function (error, data) {
                     alert(error)
@@ -556,6 +621,11 @@
 </head>
 
 <body>
+    <div class="header">
+            <h2 style="
+        padding-left: 1rem;
+    ">Linyphiid Identification Key</h2>
+        </div>
     <section class="px-3 pt-3">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -569,11 +639,27 @@
         <div class="pt-3 tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-search-spider" role="tabpanel"
                 aria-labelledby="nav-search-spider-tab">
-                <div class="d-flex justify-content-center filters-chart-wrapper">
-                    <div class="medium-height overflow-auto" id="filters">
+                <div class="d-flex justify-content-center filters-chart-wrapper bg-light-yellow-green mb-3 p-4 rounded">
+                    <div class="medium-height overflow-auto rounded bg-mint p-4" id="filters">
                     </div>
-                    <div class="ps-4">
-                        <svg width="960" height="600"></svg>
+                    <div class="d-flex ps-4">
+                        <div class="pe-4">
+                            <svg width="600" height="600"></svg>
+                        </div>
+                        <div id="chart-summary" class="rounded p-3" style="text-align: -webkit-center;">
+                            <h2>Summary</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Posterior Probability</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="chart-summary-tbody">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -583,7 +669,7 @@
                             <tr>
                                 <th>SNo.</th>
                                 <th>Species Name</th>
-                                <th>Probability</th>
+                                <th>Posterior Probability</th>
                             </tr>
                         </thead>
                         <tbody id="spiderTableBody">
