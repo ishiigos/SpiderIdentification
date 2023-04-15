@@ -305,7 +305,7 @@ def calculate_posterior(listOfSpiders, key, value, priors): #prior needs to be a
 
         # Key and value should be validated
         if key != "" and value != "":
-            for sample in listOfSpiders:
+            for sample in listOfSpiders:                
                 if priors != None and sample[SPECIES_NAME] in priors.keys():
                     sample[POSTERIOR] = priors[sample[SPECIES_NAME]]
                 else:
@@ -316,7 +316,8 @@ def calculate_posterior(listOfSpiders, key, value, priors): #prior needs to be a
                 posterior_probability = posterior[POSTERIOR] * posterior[f"P(X | {key}_{value})"] / scaling_factor
                 posterior[POSTERIOR] = posterior_probability
 
-
+        # Selecting only properties which are required for the UI
+        listOfSpiders = [{SPECIES_NAME: spider[SPECIES_NAME], POSTERIOR: spider[POSTERIOR]} for spider in listOfSpiders]
         listOfSpiders.sort(key = lambda x:x[POSTERIOR], reverse = True)
         return listOfSpiders
     except:
