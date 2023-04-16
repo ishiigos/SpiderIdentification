@@ -11,43 +11,43 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <style>
-        :root{
-            --light-yellow-green:#fef9db;
-            --light-lime:#abd699;
-            --fresh-lemon:#ffe26a;
-            --teal:#75c9b7;
-            --mint:#c7ddcc;
-            --navy:#16123f;
-            --dark-grey:#9e9e9e;
+        :root {
+            --light-yellow-green: #fef9db;
+            --light-lime: #abd699;
+            --fresh-lemon: #ffe26a;
+            --teal: #75c9b7;
+            --mint: #c7ddcc;
+            --navy: #16123f;
+            --dark-grey: #9e9e9e;
         }
 
         /* body {
             background-color: var(--light-yellow-green);
         } */
-        .header{
+        .header {
             background-color: var(--light-lime);
             padding: 0.5rem;
             color: var(--navy);
         }
 
         select.form-select:disabled {
-            background-color: var(--dark-grey);    
+            background-color: var(--dark-grey);
         }
 
-        .bg-light-lime{
-            background-color: var(--light-lime);   
+        .bg-light-lime {
+            background-color: var(--light-lime);
         }
 
-        .bg-teal{
-            background-color: var(--teal);   
+        .bg-teal {
+            background-color: var(--teal);
         }
 
-        .bg-light-yellow-green{
-            background-color: var(--light-yellow-green);   
+        .bg-light-yellow-green {
+            background-color: var(--light-yellow-green);
         }
 
-        .bg-mint{
-            background-color: var(--mint);   
+        .bg-mint {
+            background-color: var(--mint);
         }
 
         .list-item {
@@ -154,11 +154,11 @@
         }
 
         /*Chart summary*/
-        #chart-summary{
-            display:none;
+        #chart-summary {
+            display: none;
         }
 
-        #chart-summary-tbody td{
+        #chart-summary-tbody td {
             padding: 0.5rem;
             padding-right: 1rem;
         }
@@ -183,7 +183,8 @@
             height: 500px;
         }
 
-        .summary-table-wrapper td,.summary-table-wrapper th {
+        .summary-table-wrapper td,
+        .summary-table-wrapper th {
             padding: 8px;
             border: 1px solid #dddddd;
             text-align: left;
@@ -277,9 +278,9 @@
 
         var spidersTable;
 
-        var svg;        
+        var svg;
         var color;
-        var pack;   
+        var pack;
 
         class Prior {
             constructor(characteristicKey, prior) {
@@ -302,7 +303,7 @@
                     .padding(1.5);
         }
 
-        function initialiseToastr(){
+        function initialiseToastr() {
             //Can change the options below to customise the behaviour of toastr
             // toastr.options = {
             //     "closeButton": true,
@@ -374,7 +375,7 @@
 
             // Update the labels in the bubbles
             nodeUpdate.select("text")
-                .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+                .text(function (d) { return d.data.name.substring(0, d.r / 3); });
 
             // Update the titles in the bubbles
             nodeUpdate.select("title")
@@ -383,23 +384,23 @@
             displayBubbleChartSummary(priors);
         }
 
-        function displayBubbleChartSummary(priors){
+        function displayBubbleChartSummary(priors) {
             let posteriorWithCounts = priors.reduce((dict, obj) => {
                 let posteriorValue = obj.Posterior;
                 let count = dict[posteriorValue] || 0;
                 dict[posteriorValue] = count + 1;
                 return dict;
-                }, {});
+            }, {});
 
             let htmlArray = [];
-            for(let posteriorCount in posteriorWithCounts){
+            for (let posteriorCount in posteriorWithCounts) {
                 htmlArray.push(`<tr>
                                     <td>${posteriorCount}</td>
                                     <td>${posteriorWithCounts[posteriorCount]}</td>
                                 </tr>`);
             }
             document.getElementById('chart-summary-tbody').innerHTML = htmlArray.join('');
-            if(htmlArray.length > 0)
+            if (htmlArray.length > 0)
                 document.getElementById('chart-summary').style.display = 'block';
             else
                 document.getElementById('chart-summary').style.display = 'none';
@@ -445,18 +446,18 @@
             event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
         }
 
-        function validateAndAddFilter(event){
-            if(isAddingFilterAllowed(event)){
+        function validateAndAddFilter(event) {
+            if (isAddingFilterAllowed(event)) {
                 addFilter();
             }
-            else{
+            else {
                 toastr.error('Please select characteristic and its value to this filter before adding a new one.');
             }
         }
 
-        function isAddingFilterAllowed(event){
+        function isAddingFilterAllowed(event) {
             let rowCharacteristicValue = event.srcElement.parentElement.parentElement.parentElement.getElementsByClassName('characteristic-value')[0].children[0].value;
-            if(rowCharacteristicValue == '' || rowCharacteristicValue == '--Select Value--')
+            if (rowCharacteristicValue == '' || rowCharacteristicValue == '--Select Value--')
                 return false;
             else
                 return true;
@@ -722,7 +723,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="chart-summary-tbody">
-    
+
                                     </tbody>
                                 </table>
                             </div>
@@ -744,8 +745,101 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">Info page for the
-                code</div>
+            <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+                <h2>Help & Information:</h2>
+                -----------------------------------------<b>Introduction to the
+                    key</b>------------------------------------------
+                <p>
+                    This linyphiid multi-entry interactive key incorporates Bayes’ theorem with typical interactive
+                    identification key features. Incorporation of Bayes’ theorem facilitates accuracy and efficiency in
+                    the calculation of posterior probability values for each species; returning the most probable
+                    species at the top of the list followed by species with decreasing probabilities.
+                </p>
+                ----------------------------------------------------<b>Usage</b>-----------------------------------------------------
+                <p>
+                    // (Help Image? With the UI and number labels such that each component can be explained with that?
+                    Should we do that?)
+                <ol>
+                    <li>User may select desired character and character state subsequently making use of the dropdown on
+                        the “Spiders” tab. </li>
+                    <li>Once a Characteristic is selected, corresponding character states are loaded in the second
+                        dropdown menu so the selection may be completed & locked.</li>
+                    <li>The ‘+’ button allows addition of dropdown menus allowing further selection.</li>
+                    <li>Based on user selection:
+                        <ol type="a">
+                            <li>The bubble chart represents posterior probabilities of the species indicated with the
+                                size of the bubble. The summary alongside acts as a counter of the number of species
+                                with a particular probability.</li>
+                            <li>The list of spider species with an updated posterior probabilities in decreasing order.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>The “dustbin” icon acts as a remove button in order to remove a selected character state.</li>
+                    <li>The “Remove all” button acts as a reset button.</li>
+                </ol>
+                </p>
+                ----------------<b>Brief description of linyphiid anatomy (to aid selection of
+                    traits)</b>---------------
+                <p>Overall Appearance: The overall visual appearance of the spider ranging from pale, contrasting,
+                    bright, to unidentifiable.</p>
+                <p>Prosoma: The cephalothorax region of the spider consisting of the head and thorax. This serves as a
+                    point of attachment to various other characteristics like eyes, pedipalps, chelicerae, fovea, legs.
+                    (Internal organs and structures are out of scope for the purpose of this key)</p>
+                <p>Fovea: Depression formed at the thorax region of the spider.</p>
+                <p>Eye row: The formation of the eyes may be:
+                <ol type="a">
+                    <li>Procurved: Eyes curving towards the thorax.</li>
+                    <li>Recurved: Eyes curving away from the thorax</li>
+                </ol>
+                </p>
+                <p>
+                    Posterior Median Eye separation: Measurement of the distance between each eye w.r.t the diameter
+                    of each eye
+                </p>
+                <p>
+                    Opisthosoma: The “abdomen” of the spider.
+                </p>
+                <p>
+                    Head region of the Male:
+                <ol type="a">
+                    <li>Sulci: pit like structure in the head.</li>
+                    <li>Lobe: Raised lobe present near head.</li>
+                    <li>Horns/tufts: A protruding tuft of hair from the head.</li>
+                    <li>Complex: Might have more than 1 of the above.</li>
+                </ol>
+                </p>
+                <p>
+                    Chelicerae: Mouth Parts.
+                </p>
+                <p>
+                    Apophyses: Outgrowth usually in male pedipalp.
+                </p>
+                <p>
+                    Sternum appearance:
+                <ol type="a">
+                    <li>Pitted – having pits/indentations.</li>
+                    <li>Rugose – having wrinkles.</li>
+                </ol>
+                </p>
+                <p>
+                    Coxae: First leg segment
+                </p>
+                <p>
+                    Trichobothrium: Hair like structure on legs.
+                </p>
+                <p>
+                    Cymbium: The last part of the last segment of the leg in a mature male
+                </p>
+                <p>
+                    Paracymbium: Outgrowth of cymbium
+                </p>
+                <p>
+                    Embolus: The final part of the genital bulb consisting of the sperm duct.
+                </p>
+                <p>
+                    Epigyne: Point in the ventral female abdomen where the copulatory organs are present.
+                </p>
+            </div>
         </div>
     </section>
 </body>
