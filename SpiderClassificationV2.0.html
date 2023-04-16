@@ -162,6 +162,32 @@
             padding-right: 1rem;
         }
 
+        .summary-table-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-table-wrapper th {
+            position: sticky;
+            top: 0;
+            background-color: var(--light-lime);
+        }
+
+        .summary-table-wrapper thead th {
+            z-index: 1;
+        }
+
+        .summary-table-wrapper {
+            overflow-y: scroll;
+            height: 500px;
+        }
+
+        .summary-table-wrapper td,.summary-table-wrapper th {
+            padding: 8px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+
         /* Chart css */
         .node circle {
             fill: #fff;
@@ -388,6 +414,23 @@
             event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
         }
 
+        function validateAndAddFilter(event){
+            if(isAddingFilterAllowed(event)){
+                addFilter();
+            }
+            else{
+                alert('Please add value to this filter before adding a new one.');
+            }
+        }
+
+        function isAddingFilterAllowed(event){
+            let rowCharacteristicValue = event.srcElement.parentElement.parentElement.parentElement.getElementsByClassName('characteristic-value')[0].children[0].value;
+            if(rowCharacteristicValue == '' || rowCharacteristicValue == '--Select Value--')
+                return false;
+            else
+                return true;
+        }
+
         function addFilter() {
             let filtersElement = document.getElementById('filters');
             let newFilter = document.createElement('div');
@@ -433,7 +476,7 @@
                         <select class="form-select"></select>
                     </div>
                     <div class="add-delete-filter-wrapper">
-                        <button class="btn btn-add" onclick="addFilter(event)">
+                        <button class="btn btn-add" onclick="validateAndAddFilter(event)">
                             <i class="bi bi-plus-circle"></i>
                         </button>
                         <button class="btn text-danger btn-delete" onclick="showDeleteConfirmation(event)">
@@ -456,20 +499,16 @@
 
         function selectCharacteristicValue(event) {
             console.dir(event);
-            let characteristicKey = event.srcElement.parentElement.parentElement.children[0].children[0].value;
+            let characteristicKey = event.srcElement.parentElement.parentElement.getElementsByClassName('characteristic-key')[0].children[0].value;
             let characteristicValue = event.target.value;
             getSpidersForSelection(characteristicKey, characteristicValue, event)
         }
 
         function disableCharacteristicKeyAndValue(event) {
             if (event != undefined) {
-                event.srcElement.parentElement.parentElement.children[0].children[0].disabled = true;
+                event.srcElement.parentElement.parentElement.getElementsByClassName('characteristic-key')[0].children[0].disabled = true;
                 event.target.disabled = true;
             }
-        }
-
-        function showAddAfterSelection(event) {
-
         }
 
         function getSpidersForSelection(selectedKey, selectedValue, event) {
@@ -490,7 +529,6 @@
                         disableCharacteristicKeyAndValue(event);
                     }
                     populateSpiders(data);
-                    showAddAfterSelection(event);
                     generateBubbleChartAndDisplaySummary(data);
                 },
                 error: function (error, data) {
@@ -621,10 +659,8 @@
 
 <body>
     <div class="header">
-            <h2 style="
-        padding-left: 1rem;
-    ">Linyphiid Identification Key</h2>
-        </div>
+        <h2 class="ps-3">Linyphiid Identification Key</h2>
+    </div>
     <section class="px-3 pt-3">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -641,23 +677,25 @@
                 <div class="d-flex filters-chart-wrapper bg-light-yellow-green mb-3 p-4 rounded">
                     <div class="medium-height overflow-auto rounded bg-mint p-4" id="filters">
                     </div>
-                    <div class="d-flex ps-4">
+                    <div class="d-flex medium-height ps-4">
                         <div class="pe-4">
                             <svg width="600" height="600"></svg>
                         </div>
                         <div id="chart-summary" class="rounded p-3" style="text-align: -webkit-center;">
                             <h2>Summary</h2>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Posterior Probability</th>
-                                        <th>Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="chart-summary-tbody">
-
-                                </tbody>
-                            </table>
+                            <div class="summary-table-wrapper overflow-auto" style="height:550px;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Posterior Probability</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="chart-summary-tbody">
+    
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
