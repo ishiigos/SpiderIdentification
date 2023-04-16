@@ -305,22 +305,22 @@
 
         function initialiseToastr() {
             //Can change the options below to customise the behaviour of toastr
-            // toastr.options = {
-            //     "closeButton": true,
-            //     "newestOnTop": false,
-            //     "progressBar": true,
-            //     "positionClass": "toast-bottom-center",
-            //     "preventDuplicates": false,
-            //     "onclick": null,
-            //     "showDuration": "300",
-            //     "hideDuration": "1000",
-            //     "timeOut": "5000",
-            //     "extendedTimeOut": "1000",
-            //     "showEasing": "swing",
-            //     "hideEasing": "linear",
-            //     "showMethod": "fadeIn",
-            //     "hideMethod": "fadeOut"
-            //     }
+            toastr.options = {
+                // "closeButton": true,
+                // "newestOnTop": false,
+                // "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                // "preventDuplicates": false,
+                // "onclick": null,
+                // "showDuration": "300",
+                // "hideDuration": "1000",
+                // "timeOut": "5000",
+                // "extendedTimeOut": "1000",
+                // "showEasing": "swing",
+                // "hideEasing": "linear",
+                // "showMethod": "fadeIn",
+                // "hideMethod": "fadeOut"
+                }
 
             //Ways to use toastr in the below URL
             //https://codeseven.github.io/toastr/demo.html
@@ -451,7 +451,7 @@
                 addFilter();
             }
             else {
-                toastr.error('Please select characteristic and its value to this filter before adding a new one.');
+                toastr.warning('Please select characteristic and its value to this filter before adding a new one.');
             }
         }
 
@@ -560,6 +560,7 @@
                         disableCharacteristicKeyAndValue(event);
                     }
                     populateSpiders(data);
+                    document.getElementsByClassName('result-wrapper')[0].style.display = 'flex';
                     generateBubbleChartAndDisplaySummary(data);
                     toastr.success('Data Refreshed.');
                 },
@@ -731,7 +732,7 @@
                     </div>
                 </div>
 
-                <div class="pt-3 result-wrapper">
+                <div class="pt-3 result-wrapper" style="display:none;">
                     <table id="spiderTable" class="display">
                         <thead>
                             <tr>
