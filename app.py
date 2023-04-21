@@ -2,15 +2,20 @@ import copy
 from flask import Flask, jsonify, request
 import bayes
 from flask_cors import CORS
+import time 
 
 app = Flask(__name__)
 CORS(app)
 
+start_api = time.perf_counter()
 allSpiders = bayes.get_all_spiders()
+completed_api = time.perf_counter() - start_api
+print("Time to initialise = ", completed_api)
 
 @app.route('/api/v1/calculate_posterior', methods=['POST'])
 def calculate_posterior():
     global allSpiders
+    calculation_start = time.perf_counter()
     key = request.args.get('key')
     value = request.args.get('value')
     print(key, value)
@@ -20,6 +25,8 @@ def calculate_posterior():
         allSpiders = bayes.get_all_spiders() 
     allSpidersCopy = copy.deepcopy(allSpiders)
     response = bayes.calculate_posterior(allSpidersCopy.values(), key, value, priors)
+    calculation_completed = time.perf_counter() - calculation_start
+    print(f"The time to calculate for {key} and {value} is = ", calculation_completed)
     return jsonify(response)
 
 @app.route('/api/v1/get_spider_details', methods=['GET'])
