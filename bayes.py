@@ -9,6 +9,8 @@ def get_all_spiders():
     with open("Output1531.csv", "r") as csvread:
         lines = csv.reader(csvread)
         headers = next(lines)
+
+        spiderDict = {}
         samplelist = []
         for line in lines:
             dict = {}
@@ -504,13 +506,13 @@ def get_all_spiders():
             dict[headers[482]] = float(line[482])
             dict[headers[483]] = float(line[483])
             dict[headers[484]] = float(line[484])
-            dict[headers[485]] = float(line[485])        
+            dict[headers[485]] = float(line[485]) 
 
+            spiderDict[dict[headers[0]]] = dict
+            #samplelist.append(dict)
 
-            samplelist.append(dict)
-
-    print("OLD: ", samplelist)
-    return samplelist
+    print("OLD: ", spiderDict)
+    return spiderDict
 
 # def is_valid_characteristic(value):
     # print(value)
