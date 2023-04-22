@@ -37,15 +37,12 @@ def get_spider_details():
     spiderProperties = spiderDetails.keys()
     selectedSpiderDetails = {}
     for property in spiderProperties:
-        if(not (property.startswith('P(X |') or property.startswith('Sum P('))):
+        if(not (property.startswith('P(X |') or property.startswith('Sum P(') or property == 'Posterior' or property == 'Prior')):
             selectedSpiderDetails[property] = spiderDetails[property]
     return jsonify(selectedSpiderDetails)
 
 if __name__ == '__main__':
     print('Flask is running')
-    # allSpiders = bayes.get_all_spiders()
-    # response = bayes.calculate_posterior(allSpiders, "Sex", "Male", 1/1531)
-    # print(response)
     app.run(debug=True)
 else:
     print("run as module api")

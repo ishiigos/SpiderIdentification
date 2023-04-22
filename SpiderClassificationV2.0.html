@@ -153,6 +153,14 @@
             height: 600px;
         }
 
+        .modal-dialog{
+            max-width:50%;
+        }
+
+        #spiderTableBody tr{
+            cursor: pointer;
+        }
+
         /*Chart summary*/
         #chart-summary {
             display: none;
@@ -188,6 +196,10 @@
             padding: 8px;
             border: 1px solid #dddddd;
             text-align: left;
+        }
+
+        .modal-header{
+            background-color: var(--light-lime);
         }
 
         /* Chart css */
@@ -226,47 +238,47 @@
 
     <script>
         const allCharacteristics = {
-            "Sex": ["Male", "Female"],
-            "Overall Appearance": ["inconspicuous, generally dark", "bright, red, orange", "conspicuous contrast legs/prosoma", "pale, ground or cave dweller"],
-            "Length of prosoma [mm]": ["0.44", "0.45", "0.46", "0.47", "0.48", "0.49", "0.5", "0.51", "0.52", "0.53", "0.54", "0.55", "0.56", "0.57", "0.58", "0.59", "0.6", "0.61", "0.62", "0.63", "0.64", "0.65", "0.66", "0.67", "0.68", "0.69", "0.7", "0.71", "0.72", "0.73", "0.74", "0.75", "0.76", "0.77", "0.78", "0.79", "0.8", "0.81", "0.82", "0.83", "0.84", "0.85", "0.86", "0.87", "0.88", "0.89", "0.9", "0.91", "0.92", "0.93", "0.94", "0.95", "0.96", "0.97", "0.98", "0.99", "mm", "1.01", "1.02", "1.03", "1.04", "1.05", "1.06", "1.07", "1.08", "1.09", "1.1", "1.11", "1.12", "1.13", "1.15", "1.16", "1.17", "1.18", "1.19", "1.2", "1.21", "1.22", "1.25", "1.26", "1.27", "1.28", "1.3", "1.32", "1.34", "1.35", "1.38", "1.4", "1.41", "1.42", "1.45", "1.47", "1.5", "1.55", "1.58", "1.6", "1.62", "1.65", "1.66", "1.7", "1.75", "1.8", "1.85", "1.9", "1.95", "1.98", "2", "2.05", "2.09", "2.1", "2.15", "2.2", "2.25", "2.3", "2.4", "2.5", "3.0"],
-            "Length of prosoma by range [mm]": ["0.4-0.6", "0.6-0.8", "0.8-1.0", "1.0-1.2", "1.2-1.4", "1.4-1.6", "1.6-1.8", "1.8-2.0", "2.0-2.2", "2.2-2.4", "2.4-2.6", "2.6-2.8", "2.8-3.0"],
-            "Length of femur I :&lt;relative to prosoma&gt;": ["equal in length", "longer than prosoma", "shorter than prosoma"],
-            "Prosoma &lt;appearance&gt;": ["inconspicuous", "margins with teeth", "with conspicuous hairs/spines", "with pits (dorsally)"],
-            "Fovea as darkened groove": ["yes", "no"],
-            "Opisthosoma &lt;appearance&gt;": ["conspicuously hairy", "patterned", "unicolourous, inconspicuous", "with scutum"],
-            "Dorsal spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
-            "Posterior eye row: &lt;form&gt;": ["procurved", "recurved", "straight"],
-            "Posterior median eye (PME) separation: &lt;relative to diameter (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
-            "Headregion of male: &lt;appearance&gt;": ["complex", "inconspicuous", "sulci present", "with lobe (simple)", "with horns/tufts"],
-            "Eyes: &lt;appearance&gt;": ["normal", "reduced"],
-            "Anterior median eyes: &lt;size relative to anterior lateral eyes ALE&gt;": ["about the same as ALE", "distinctly larger than ALE", "distinctly smaller than ALE"],
-            "Prolateral spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
-            "Prolateral spines on tibia I: &lt;count&gt;": ["multiple", "none", "one"],
-            "Anterior cheliceral teeth: &lt;appearance&gt;": ["conspicuously large", "unremarkable in size"],
-            "Conspicuous structures on chelicerae: &lt;appearance&gt;": ["apophyses/teeth-like processes/tubercles", "none", "spines"],
-            "Maxillae: &lt;appearance&gt;": ["one or more teeth/tubercles", "unremarkable"],
-            "Sternum: &lt;appearance&gt;": ["pitted", "rugose", "smooth"],
-            "Sternum: &lt;extends between coxae IV&gt;": ["yes", "no"],
-            "Width of sternum between coxae IV: &lt;relative to width of coxae IV (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
-            "Position of trichobothrium on metatarsus I (TmI): &lt;relative to metatarsus&gt;": ["0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "0.32", "0.33", "0.34", "0.35", "0.36", "0.37", "0.38", "0.39", "0.4", "0.41", "0.42", "0.43", "0.44", "0.45", "0.46", "0.47", "0.48", "0.49", "0.5", "0.51", "0.52", "0.53", "0.54", "0.55", "0.56", "0.57", "0.58", "0.59", "0.6", "0.61", "0.62", "0.63", "0.64", "0.65", "0.66", "0.67", "0.68", "0.69", "0.7", "0.71", "0.72", "0.73", "0.74", "0.75", "0.76", "0.77", "0.78", "0.79", "0.8", "0.81", "0.82", "0.83", "0.84", "0.85", "0.86", "0.87", "0.88", "0.89", "0.9", "0.91", "0.92", "0.93", "0.94", "0.95", "0.96", "0.97", "0.98"],
-            "Position of TmI by range: &lt;relative to metatarsus&gt;": ["0.10-0.19", "0.20-0.29", "0.30-0.39", "0.40-0.49", "0.50-0.59", "0.60-0.69", "0.70-0.79", "0.80-0.89", "0.90-0.98"],
-            "Metatarsus IV dorsally: &lt;presence of trichobothrium (TmIV)&gt;": [" trichobothrium present", "trichobothrium absent"],
-            "Dorsal spines on metatarsus I: &lt;count&gt;": ["multiple", "none", "one"],
-            "Tibia IV: &lt;number of dorsal spines&gt;": ["one dorsal spine", "two dorsal spines"],
-            "Numbers of dorsal spines on tibia I, II, III, IV: &lt;tibial spine formula&gt;": ["0", "11", "1111", "2211", "2221", "2222"],
-            "Tibia I-II ventrally: &lt;presence of spines&gt;": ["no spines", "stout spines in two rows"],
-            "Male pedipalp: femur &lt;appearance&gt;": ["unremarkable", "conspicuous"],
-            "Male pedipalp: patella &lt;appearance&gt;": ["conspicuously swollen", "unremarkable", "with apophyses", "with conspicuous spines (single or tufts)"],
-            "Male pedipalp: tibia &lt;appearance&gt;": ["unremarkable", "with complex apophysis", "with multiple, complex apophysis", "with multiple, simple apophysis", "with one or more spines", "with simple apophysis", "with tufts of hair or spines"],
-            "Male pedipalp: cymbium &lt;appearance&gt;": ["margin with notches/bulges", "bulges", "with dorsal projections/conical elevations"],
-            "Male pedipalp: paracymbium &lt;form&gt;": ["complex", "simple"],
-            "Male pedipalp: branches of paracymbium &lt;presence of teeth&gt;": ["teeth absent", "teeth present"],
-            "Male pedipalp: embolus &lt;appearance&gt;": ["conspicuous, circular", "conspicuous, curled", "unremarkable"],
-            "Male pedipalp: lamella characteristica &lt;presence&gt;": ["absent", "conspicuous"],
-            "Female palp: claw &lt;presence&gt;": ["conspicuous", "not present/ inconspicuous"],
-            "Epigyne: &lt;form&gt;": ["flat", "protrudes"],
-            "Epigyne: &lt;seminal receptacles&gt;": ["underlying structures (e.g., seminal receptacles) not visible", "underlying structures (e.g., seminal receptacles) visible"],
-            "Distribution": ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
+                "Sex": ["Male", "Female"],
+                "Overall Appearance": ["inconspicuous, generally dark", "bright, red, orange", "conspicuous contrast legs/prosoma", "pale, ground or cave dweller"],
+                "Length of prosoma [mm]": ["0.44", "0.45", "0.46", "0.47", "0.48", "0.49", "0.5", "0.51", "0.52", "0.53", "0.54", "0.55", "0.56", "0.57", "0.58", "0.59", "0.6", "0.61", "0.62", "0.63", "0.64", "0.65", "0.66", "0.67", "0.68", "0.69", "0.7", "0.71", "0.72", "0.73", "0.74", "0.75", "0.76", "0.77", "0.78", "0.79", "0.8", "0.81", "0.82", "0.83", "0.84", "0.85", "0.86", "0.87", "0.88", "0.89", "0.9", "0.91", "0.92", "0.93", "0.94", "0.95", "0.96", "0.97", "0.98", "0.99", "mm", "1.01", "1.02", "1.03", "1.04", "1.05", "1.06", "1.07", "1.08", "1.09", "1.1", "1.11", "1.12", "1.13", "1.15", "1.16", "1.17", "1.18", "1.19", "1.2", "1.21", "1.22", "1.25", "1.26", "1.27", "1.28", "1.3", "1.32", "1.34", "1.35", "1.38", "1.4", "1.41", "1.42", "1.45", "1.47", "1.5", "1.55", "1.58", "1.6", "1.62", "1.65", "1.66", "1.7", "1.75", "1.8", "1.85", "1.9", "1.95", "1.98", "2", "2.05", "2.09", "2.1", "2.15", "2.2", "2.25", "2.3", "2.4", "2.5", "3.0"],
+                "Length of prosoma by range [mm]": ["0.4-0.6", "0.6-0.8", "0.8-1.0", "1.0-1.2", "1.2-1.4", "1.4-1.6", "1.6-1.8", "1.8-2.0", "2.0-2.2", "2.2-2.4", "2.4-2.6", "2.6-2.8", "2.8-3.0"],
+                "Length of femur I :&lt;relative to prosoma&gt;": ["equal in length", "longer than prosoma", "shorter than prosoma"],
+                "Prosoma &lt;appearance&gt;": ["inconspicuous", "margins with teeth", "with conspicuous hairs/spines", "with pits (dorsally)"],
+                "Fovea as darkened groove": ["yes", "no"],
+                "Opisthosoma &lt;appearance&gt;": ["conspicuously hairy", "patterned", "unicolourous, inconspicuous", "with scutum"],
+                "Dorsal spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
+                "Posterior eye row: &lt;form&gt;": ["procurved", "recurved", "straight"],
+                "Posterior median eye (PME) separation: &lt;relative to diameter (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
+                "Headregion of male: &lt;appearance&gt;": ["complex", "inconspicuous", "sulci present", "with lobe (simple)", "with horns/tufts"],
+                "Eyes: &lt;appearance&gt;": ["normal", "reduced"],
+                "Anterior median eyes: &lt;size relative to anterior lateral eyes ALE&gt;": ["about the same as ALE", "distinctly larger than ALE", "distinctly smaller than ALE"],
+                "Prolateral spines on femur I: &lt;count&gt;": ["multiple", "none", "one"],
+                "Prolateral spines on tibia I: &lt;count&gt;": ["multiple", "none", "one"],
+                "Anterior cheliceral teeth: &lt;appearance&gt;": ["conspicuously large", "unremarkable in size"],
+                "Conspicuous structures on chelicerae: &lt;appearance&gt;": ["apophyses/teeth-like processes/tubercles", "none", "spines"],
+                "Maxillae: &lt;appearance&gt;": ["one or more teeth/tubercles", "unremarkable"],
+                "Sternum: &lt;appearance&gt;": ["pitted", "rugose", "smooth"],
+                "Sternum: &lt;extends between coxae IV&gt;": ["yes", "no"],
+                "Width of sternum between coxae IV: &lt;relative to width of coxae IV (d)&gt;": ["distinctly greater than d", "distinctly less than d", "equal to d"],
+                "Position of trichobothrium on metatarsus I (TmI): &lt;relative to metatarsus&gt;": ["0.11", "0.12", "0.13", "0.14", "0.15", "0.16", "0.17", "0.18", "0.19", "0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26", "0.27", "0.28", "0.29", "0.3", "0.31", "0.32", "0.33", "0.34", "0.35", "0.36", "0.37", "0.38", "0.39", "0.4", "0.41", "0.42", "0.43", "0.44", "0.45", "0.46", "0.47", "0.48", "0.49", "0.5", "0.51", "0.52", "0.53", "0.54", "0.55", "0.56", "0.57", "0.58", "0.59", "0.6", "0.61", "0.62", "0.63", "0.64", "0.65", "0.66", "0.67", "0.68", "0.69", "0.7", "0.71", "0.72", "0.73", "0.74", "0.75", "0.76", "0.77", "0.78", "0.79", "0.8", "0.81", "0.82", "0.83", "0.84", "0.85", "0.86", "0.87", "0.88", "0.89", "0.9", "0.91", "0.92", "0.93", "0.94", "0.95", "0.96", "0.97", "0.98"],
+                "Position of TmI by range: &lt;relative to metatarsus&gt;": ["0.10-0.19", "0.20-0.29", "0.30-0.39", "0.40-0.49", "0.50-0.59", "0.60-0.69", "0.70-0.79", "0.80-0.89", "0.90-0.98"],
+                "Metatarsus IV dorsally: &lt;presence of trichobothrium (TmIV)&gt;": [" trichobothrium present", "trichobothrium absent"],
+                "Dorsal spines on metatarsus I: &lt;count&gt;": ["multiple", "none", "one"],
+                "Tibia IV: &lt;number of dorsal spines&gt;": ["one dorsal spine", "two dorsal spines"],
+                "Numbers of dorsal spines on tibia I, II, III, IV: &lt;tibial spine formula&gt;": ["0", "11", "1111", "2211", "2221", "2222"],
+                "Tibia I-II ventrally: &lt;presence of spines&gt;": ["no spines", "stout spines in two rows"],
+                "Male pedipalp: femur &lt;appearance&gt;": ["unremarkable", "conspicuous"],
+                "Male pedipalp: patella &lt;appearance&gt;": ["conspicuously swollen", "unremarkable", "with apophyses", "with conspicuous spines (single or tufts)"],
+                "Male pedipalp: tibia &lt;appearance&gt;": ["unremarkable", "with complex apophysis", "with multiple, complex apophysis", "with multiple, simple apophysis", "with one or more spines", "with simple apophysis", "with tufts of hair or spines"],
+                "Male pedipalp: cymbium &lt;appearance&gt;": ["margin with notches/bulges", "bulges", "with dorsal projections/conical elevations"],
+                "Male pedipalp: paracymbium &lt;form&gt;": ["complex", "simple"],
+                "Male pedipalp: branches of paracymbium &lt;presence of teeth&gt;": ["teeth absent", "teeth present"],
+                "Male pedipalp: embolus &lt;appearance&gt;": ["conspicuous, circular", "conspicuous, curled", "unremarkable"],
+                "Male pedipalp: lamella characteristica &lt;presence&gt;": ["absent", "conspicuous"],
+                "Female palp: claw &lt;presence&gt;": ["conspicuous", "not present/ inconspicuous"],
+                "Epigyne: &lt;form&gt;": ["flat", "protrudes"],
+                "Epigyne: &lt;seminal receptacles&gt;": ["underlying structures (e.g., seminal receptacles) not visible", "underlying structures (e.g., seminal receptacles) visible"],
+                "Distribution": ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
         }
 
         const selectCharacteristicsText = '--Select Characteristic--';
@@ -277,7 +289,6 @@
 
         //Stored priors has index 0 as the default values
         var storedPriors = [];
-        //var nextPriors = {};
 
         var spidersTable;
 
@@ -323,7 +334,7 @@
                 // "hideEasing": "linear",
                 // "showMethod": "fadeIn",
                 // "hideMethod": "fadeOut"
-                }
+            }
 
             //Ways to use toastr in the below URL
             //https://codeseven.github.io/toastr/demo.html
@@ -413,7 +424,6 @@
             addFilter();
             getSpidersForSelection('', '');
             initialiseBubbleChart();
-            //initialiseRaceChart();
             initialiseToastr();
         });
 
@@ -428,16 +438,16 @@
             return filterOptions.join('');
         }
 
-        function convertToCharacteristicKeyHtmlCompatibleName(characteristic) {
-            return characteristic.replace("<", "&lt;").replace(">", "&gt;");
+        function convertToHtmlCompatibleValue(value) {
+            return value.replace("<", "&lt;").replace(">", "&gt;");
         }
 
-        function convertToCharacteristicKeyNormalName(characteristic) {
-            return characteristic.replace("&lt;", "<").replace("&gt;", ">");
+        function convertFromHtmlCompatibleValue(value) {
+            return value.replace("&lt;", "<").replace("&gt;", ">");
         }
 
         function getCharacteristicsPossibleValues(characteristic) {
-            let characteristicKey = convertToCharacteristicKeyHtmlCompatibleName(characteristic);
+            let characteristicKey = convertToHtmlCompatibleValue(characteristic);
             return allCharacteristics[characteristicKey];
         }
 
@@ -477,7 +487,7 @@
         function getCharacteristicKeysForOptions() {
             let tempKeys = Object.keys(allCharacteristics);
             if (selectedCharacteristicKeys.length > 0) {
-                return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(convertToCharacteristicKeyNormalName(x)));
+                return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(convertFromHtmlCompatibleValue(x)));
             }
             else {
                 return tempKeys;
@@ -568,12 +578,11 @@
                     toastr.success('Data Refreshed.');
                 },
                 error: function (error, data) {
-                    toastr.error('Some error occured. Please try after some time.');
+                    toastr.error('Some error occured. Please try again.');
                     console.dir(error);
                     console.dir(data);
                 }
             });
-
         }
 
         function addSelectedCharacteristicKey(characteristicKey) {
@@ -651,18 +660,49 @@
             storedPriors.push(new Prior(characteristicKey, prior));
         }
 
+        function populateSpiderDetailsModal(speciesName, spiderDetails){
+            $('#spiderDetailsModalTitle').text(speciesName);
+
+            let spiderDetailsModalBody = []
+            
+            $.each(Object.keys(spiderDetails), function(index, key){
+                let htmlCompatibleKey = convertToHtmlCompatibleValue(key);
+                let htmlCompatibleValue = convertToHtmlCompatibleValue(spiderDetails[key]);
+                spiderDetailsModalBody.push(`<div><b>${htmlCompatibleKey}</b>: ${htmlCompatibleValue}</div>`);
+            });
+
+            $('#spiderDetailsModalBody').html(spiderDetailsModalBody.join('\n'));
+            $('#launchModal').click()
+        }
+
+        function fetchSpiderDetails(speciesName){
+            $.ajax({
+                url: `http://127.0.0.1:5000/api/v1/get_spider_details?speciesName=${speciesName}`,
+                dataType: 'json',
+                type: 'GET',
+                contentType: "application/json",
+                success: function (data) {
+                    populateSpiderDetailsModal(speciesName, data);
+                    toastr.success(`Species Details Loaded.`);
+                },
+                error: function (error, data) {
+                    toastr.error('Some error occured. Please try again later.');
+                    console.dir(error);
+                    console.dir(data);
+                }
+            });
+        }
+
         function populateSpiders(rows) {
-            //ajax.showProgressBar;
             let html = '';
             let temp = '';
             let rowCount = 1;
-            //alert('the total no of rows are ' + rows.length);
             $.each(rows, function (index, value) {
-                html += `<tr>
+                html += `<tr onclick="fetchSpiderDetails('${value['Species Name']}')">
                                 <td>${rowCount}</td>
                                 <td>${value['Species Name']}</td>
                                 <td>${value['Posterior']}</td>
-                            </tr>`;
+                         </tr>`;
                 rowCount += 1;
             });
 
@@ -845,6 +885,27 @@
                 </p>
             </div>
         </div>
+
+        <div class="modal fade" id="spiderDetailsModal" tabindex="-1" aria-labelledby="spiderDetailsModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="spiderDetailsModalTitle"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="spiderDetailsModalBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="launchModal" data-bs-target="#spiderDetailsModal" hidden>
+            Launch modal
+        </button>
     </section>
 </body>
 
