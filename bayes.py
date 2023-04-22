@@ -11,7 +11,6 @@ def get_all_spiders():
         headers = next(lines)
 
         spiderDict = {}
-        samplelist = []
         for line in lines:
             dict = {}
             dict[headers[0]] = line[0]               # Species Name
@@ -509,7 +508,6 @@ def get_all_spiders():
             dict[headers[485]] = float(line[485]) 
 
             spiderDict[dict[headers[0]]] = dict
-            #samplelist.append(dict)
 
     print("OLD: ", spiderDict)
     return spiderDict
