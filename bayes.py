@@ -10,6 +10,7 @@ def get_all_spiders():
         lines = csv.reader(csvread)
         headers = next(lines)
 
+        print('Initializing: ', end='')
         spiderDict = {}
         for line in lines:
             dict = {}
@@ -508,8 +509,8 @@ def get_all_spiders():
             dict[headers[485]] = float(line[485]) 
 
             spiderDict[dict[headers[0]]] = dict
-
-    print("OLD: ", spiderDict)
+    
+    print("Completed.")
     return spiderDict
 
 # def is_valid_characteristic(value):
