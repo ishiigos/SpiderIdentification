@@ -279,14 +279,21 @@
                 "Distribution": ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
         }
 
+        const posteriorNameText = 'Posterior'
+        const speciesNameText = 'Species Name'
         const selectCharacteristicsText = '--Select Characteristic--';
+        const selectValueText = '--Select Value--';
         const diameter = 600;
+
+        //Array to store all the selected Characteristic keys so already selected values are no longer available for selection
         var selectedCharacteristicKeys = [];
-
-        var priorCharacteristicKeys = [];
-
+        
         //Stored priors has index 0 as the default values
+        //Array to store all priors so it can be used when recalculation of posterior probability upon delete of a filter is done
         var storedPriors = [];
+
+        //Used to stop user from adding new filter when a calculation is in progress.
+        var isLoading = false;
 
         var spidersTable;
 
@@ -326,8 +333,8 @@
             // Create data array and sort in descending order of value
             $.each(priors, function (index, value) {
                 let temp = {
-                    name: value['Species Name'],
-                    value: value['Posterior']
+                    name: value[speciesNameText],
+                    value: value[posteriorNameText]
                 };
                 data.push(temp);
             });
@@ -355,6 +362,7 @@
             nodeEnter.append("circle")
                 .attr("r", function (d) { return d.r; });
 
+            // Update the titles in the bubbles for the first instance so we can see details of the species upon hover on a bubble
             nodeEnter.append("title")
                 .text(function (d) { return d.data.name + "\n" + d.value; });
 
@@ -363,11 +371,7 @@
             nodeUpdate.select("circle")
                 .attr("r", function (d) { return d.r; });
 
-            // Update the labels in the bubbles
-            nodeUpdate.select("text")
-                .text(function (d) { return d.data.name.substring(0, d.r / 3); });
-
-            // Update the titles in the bubbles
+            // Update the titles in the bubbles so we can see details of the species upon hover on a bubble
             nodeUpdate.select("title")
                 .text(function (d) { return d.data.name + "\n" + d.value; });
 
@@ -431,23 +435,34 @@
             event.srcElement.children[0].disabled = true;
             let selectedValue = event.target.value;
             let characteristicValues = getCharacteristicsPossibleValues(selectedValue);
-            let characteristicValuesOptions = generateDropDownOptionsHtml(characteristicValues, "--Select Value--", "selectCharacteristicValue");
+            let characteristicValuesOptions = generateDropDownOptionsHtml(characteristicValues, selectValueText, "selectCharacteristicValue");
             event.srcElement.parentElement.parentElement.children[2].innerHTML = characteristicValuesOptions;
         }
 
         function validateAndAddFilter(event) {
-            if (isAddingFilterAllowed(event)) {
+            let rowCharacteristicValue = event.srcElement.parentElement.parentElement.getElementsByClassName('characteristic-value')[0].children[0].value;
+            if (isAddingFilterAllowed(rowCharacteristicValue)) {
                 addFilter();
-            }
-            else {
-                toastr.warning('Please select characteristic and its value to this filter before adding a new one.');
             }
         }
 
-        function isAddingFilterAllowed(event) {
+        function validateAndAddFilterByIcon(event) {
             let rowCharacteristicValue = event.srcElement.parentElement.parentElement.parentElement.getElementsByClassName('characteristic-value')[0].children[0].value;
-            if (rowCharacteristicValue == '' || rowCharacteristicValue == '--Select Value--')
+            if (isAddingFilterAllowed(rowCharacteristicValue)) {
+                addFilter();
+            }
+            event.stopPropagation();
+        }
+
+        function isAddingFilterAllowed(rowCharacteristicValue) {            
+            if(isLoading){
+                toastr.info('Spider data is being fetched. Please wait...');
                 return false;
+            }
+            else if (rowCharacteristicValue == '' || rowCharacteristicValue == selectValueText){
+                toastr.warning('Please select characteristic and its value to this filter before adding a new one.');
+                return false;
+            }                
             else
                 return true;
         }
@@ -463,9 +478,12 @@
         function getCharacteristicKeysForOptions() {
             let tempKeys = Object.keys(allCharacteristics);
             if (selectedCharacteristicKeys.length > 0) {
-                return tempKeys.filter((x) => !selectedCharacteristicKeys.includes(convertFromHtmlCompatibleValue(x)));
+                let filteredKeys = tempKeys.filter((x) => !selectedCharacteristicKeys.includes(convertFromHtmlCompatibleValue(x)));
+                console.log(`Selected characteristics Keys Count: ${selectedCharacteristicKeys.length}, filters count: ${filteredKeys.length}`);
+                return filteredKeys;
             }
             else {
+                console.log(`Selected characteristics Keys Count: ${selectedCharacteristicKeys.length}, filters count: ${tempKeys.length}`);
                 return tempKeys;
             }
         }
@@ -493,19 +511,19 @@
                         <select class="form-select"></select>
                     </div>
                     <div class="add-delete-filter-wrapper">
-                        <button class="btn btn-add" onclick="validateAndAddFilter(event)">
-                            <i class="bi bi-plus-circle" title="Add Filter"></i>
+                        <button class="btn btn-add" onclick="validateAndAddFilter(event)" title="Add Filter">
+                            <i class="bi bi-plus-circle" onclick="validateAndAddFilterByIcon(event)"></i>
                         </button>
-                        <button class="btn text-danger btn-delete" onclick="showDeleteConfirmation(event)">
-                            <i class="bi bi-trash3-fill" onclick="showDeleteConfirmationByIcon(event)" title="Remove Filter"></i>
+                        <button class="btn text-danger btn-delete" onclick="showDeleteConfirmation(event)" title="Remove Filter">
+                            <i class="bi bi-trash3-fill" onclick="showDeleteConfirmationByIcon(event)"></i>
                         </button>
                     </div>
                     <div class="delete-confirmation-wrapper">
-                        <button class="btn btn-confirm-yes" onclick="removeFilter(event)">
-                            <i class="bi bi-check-square" onclick="removeFilterByIcon(event)" title="Confirm Delete"></i>
+                        <button class="btn btn-confirm-yes" onclick="removeFilter(event)" title="Confirm Delete">
+                            <i class="bi bi-check-square" onclick="removeFilterByIcon(event)"></i>
                         </button>
-                        <button class="btn btn-confirm-no" onclick="cancelDeleteFilterOperation(event)">
-                            <i class="bi bi-x-square" onclick="cancelDeleteFilterOperationByIcon(event)" title="Reject Delete"></i>
+                        <button class="btn btn-confirm-no" onclick="cancelDeleteFilterOperation(event)" title="Reject Delete">
+                            <i class="bi bi-x-square" onclick="cancelDeleteFilterOperationByIcon(event)"></i>
                         </button>
                     </div>
                     <div class="remove-all-button">
@@ -525,12 +543,20 @@
                 event.srcElement.parentElement.parentElement.getElementsByClassName('characteristic-key')[0].children[0].disabled = true;
                 event.target.disabled = true;
             }
+        }        
+
+        function getLatestPrior(){
+            let prior = {};
+            if (storedPriors.length > 0) {
+                prior = storedPriors[storedPriors.length - 1].prior;
+            }
+            return prior;
         }
 
-        function getSpidersForMultipleSelection(selectedFilters, index, prior){            
+        function getSpidersForMultipleSelection(selectedFilters, index, prior){ 
+            isLoading = true;  
             let selectedKey = selectedFilters[index].getElementsByClassName('characteristic-key')[0].children[0].value;
             let selectedValue = selectedFilters[index].getElementsByClassName('characteristic-value')[0].children[0].value;                   
-
             $.ajax({
                 url: `http://127.0.0.1:5000/api/v1/calculate_posterior?key=${selectedKey}&value=${selectedValue}`,
                 dataType: 'json',
@@ -542,34 +568,26 @@
                         storePriors(selectedKey, data);
                         addSelectedCharacteristicKey(selectedKey);
                     }
-
+                    populateSpiders(data);
+                    document.getElementsByClassName('result-wrapper')[0].style.display = 'flex';
+                    generateBubbleChartAndDisplaySummary(data);
+                    toastr.success('Data Refreshed.');    
                     if(index != selectedFilters.length - 1){
                         getSpidersForMultipleSelection(selectedFilters, index + 1, getLatestPrior());
-                    }
+                    }              
                     else{
-                        populateSpiders(data);
-                        document.getElementsByClassName('result-wrapper')[0].style.display = 'flex';
-                        generateBubbleChartAndDisplaySummary(data);
-                        toastr.success('Data Refreshed.');                        
-                    }                    
+                        isLoading = false;
+                    }
                 },
                 error: function (error, data) {
-                    toastr.error('Some error occured. Please try again.');
+                    toastr.error('Some error occured. Please refresh the tool and try again.');
                     console.dir(error);
-                    console.dir(data);
                 }
             });
         }
 
-        function getLatestPrior(){
-            let prior = {};
-            if (storedPriors.length > 0) {
-                prior = storedPriors[storedPriors.length - 1].prior;
-            }
-            return prior;
-        }
-
         function getSpidersForSelection(selectedKey, selectedValue, event) {
+            isLoading = true;
             let prior = getLatestPrior();
             $.ajax({
                 url: `http://127.0.0.1:5000/api/v1/calculate_posterior?key=${selectedKey}&value=${selectedValue}`,
@@ -589,12 +607,15 @@
                     toastr.success('Data Refreshed.');
                 },
                 error: function (error, data) {
+                    event.target.value = selectValueText;
                     toastr.error('Some error occured. Please try again.');
                     console.dir(error);
-                    console.dir(data);
+                },
+                complete: function(){
+                    isLoading = false;
                 }
             });
-        }
+        }        
 
         function addSelectedCharacteristicKey(characteristicKey) {
             if (characteristicKey != undefined && characteristicKey != '' && !selectedCharacteristicKeys.includes(characteristicKey)) {
@@ -640,23 +661,59 @@
         }
 
         function removeFilterByElement(element) {
-            let deletingIndex = selectedCharacteristicKeys.findIndex((key) => key == element.getElementsByClassName('characteristic-key')[0].children[0].value);
-            if (deletingIndex != -1) {                
-                selectedCharacteristicKeys.splice(deletingIndex, 1);                
+            let elementCharacteristicKey = element.getElementsByClassName('characteristic-key')[0].children[0].value;
+            let elementCharacteristicValue = element.getElementsByClassName('characteristic-value')[0].children[0].value;
+
+            //Remove a filter which is not yet submitted without any logic
+            if(elementCharacteristicKey == selectCharacteristicsText || elementCharacteristicValue == selectValueText){
+                element.remove();
             }
-            let deletingStoredPriorsIndex = storedPriors.findIndex((prior) => prior.characteristicKey == element.getElementsByClassName('characteristic-key')[0].children[0].value);
-            if (deletingStoredPriorsIndex != -1) {
-                removeStoredPriorsFromIndex(deletingStoredPriorsIndex);
+            else{            
+                //Remove filter along with clearing the selected lists
+                let deletingIndex = selectedCharacteristicKeys.findIndex((key) => key == elementCharacteristicKey);
+                if (deletingIndex != -1) {                
+                    selectedCharacteristicKeys.splice(deletingIndex, 1);                
+                }
+                else{                
+                    console.log(`Error removing characterisitic key from selectedCharacteristicKeys key:${elementCharacteristicKey}`)
+                    console.dir(selectedCharacteristicKeys);
+                }
+
+                let deletingStoredPriorsIndex = storedPriors.findIndex((prior) => prior.characteristicKey == elementCharacteristicKey);
+                if (deletingStoredPriorsIndex != -1) {
+                    removeStoredPriorsFromIndex(deletingStoredPriorsIndex);
+                    element.remove();
+                    if (document.getElementsByClassName('filter').length == 0) {
+                        addFilter();
+                    }
+                    else{
+                        removeEmptyFilters();
+                    }                 
+                    recalculateForFiltersAfterIndex(deletingStoredPriorsIndex - 1);
+                }
+                else{
+                    console.log(`Error removing stored Prior from storedPriors key:${elementCharacteristicKey}`)
+                    console.dir(storedPriors);
+                }
             }
-            element.remove();
-            if (document.getElementsByClassName('filter').length == 0) {
-                addFilter();
-            }
-            recalculateForFiltersAfterIndex(deletingStoredPriorsIndex - 1);
         }
 
         function removeStoredPriorsFromIndex(index) {
             storedPriors = storedPriors.splice(0, index);
+        }
+
+        function removeEmptyFilters(){
+            let selectedFilters = document.getElementsByClassName('filter');
+            for(let i = selectedFilters.length - 1; i >= 0; i--){
+                let key = selectedFilters[i].getElementsByClassName('characteristic-key')[0].children[0].value;
+                let value = selectedFilters[i].getElementsByClassName('characteristic-value')[0].children[0].value;
+                if(key == '' || key == undefined || key == selectCharacteristicsText || value == '' || value == undefined || value == selectValueText){
+                    selectedFilters[i].remove();
+                }
+                else{
+                    return;
+                }
+            }
         }
 
         function removeAll(event) {
@@ -666,7 +723,7 @@
         function storePriors(characteristicKey, rows) {
             let prior = {};
             $.each(rows, function (index, value) {
-                prior[value['Species Name']] = value['Posterior']
+                prior[value[speciesNameText]] = value[posteriorNameText]
             });
             storedPriors.push(new Prior(characteristicKey, prior));
         }
@@ -699,7 +756,6 @@
                 error: function (error, data) {
                     toastr.error('Some error occured. Please try again later.');
                     console.dir(error);
-                    console.dir(data);
                 }
             });
         }
@@ -709,10 +765,10 @@
             let temp = '';
             let rowCount = 1;
             $.each(rows, function (index, value) {
-                html += `<tr onclick="fetchSpiderDetails('${value['Species Name']}')" title='Click to view details'>
+                html += `<tr onclick="fetchSpiderDetails('${value[speciesNameText]}')" title='Click to view details'>
                                 <td>${rowCount}</td>
-                                <td>${value['Species Name']}</td>
-                                <td>${value['Posterior']}</td>
+                                <td>${value[speciesNameText]}</td>
+                                <td>${value[posteriorNameText]}</td>
                          </tr>`;
                 rowCount += 1;
             });
