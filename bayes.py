@@ -4,6 +4,7 @@ import traceback
 #Contant strings - Following standards to name contants in all caps.
 POSTERIOR = "Posterior"
 SPECIES_NAME = "Species Name"
+SPECIES_NOT_PART_OF_THIS_KEY = "Species not part of this key"
 
 def get_all_spiders():
     with open("Output1531.csv", "r") as csvread:
@@ -20,6 +21,8 @@ def get_all_spiders():
             dict[headers[3]] = float(line[3])        # P(X | Sex_Female)
             #dict["Colour"] = colour
             prior = 1 / 1531
+            if line[0] == SPECIES_NOT_PART_OF_THIS_KEY:
+                prior = prior / 100
             dict["Prior"] =  prior # float(line[3])            
             dict[POSTERIOR] = prior
             # dict[headers[4]] = line[4]               Sum(P(Sex))
