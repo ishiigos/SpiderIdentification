@@ -27,225 +27,10 @@ with open("Ext1531csv.csv", "r") as csvread:
     #lines = csv.reader(csvread)
 
     countries = get_countries() 
-    
-    like_male = 1/2
-    like_female = 1/2
-
-    like_igd = 1/4
-    like_bro = 1/4
-    like_clp = 1/4
-    like_pgc = 1/4
-    sum_OA = 0
-
-    like_equal_to_prosoma = 1/3
-    like_longer_than_prosoma = 1/3
-    like_shorter_than_prosoma = 1/3
-    sum_length_femur_p = 0
-
-    like_inconsp_prosoma = 1/4
-    like_margins_with_teeth = 1/4
-    like_consp_hair = 1/4
-    like_pits = 1/4
-    sum_prosoma_app=0
-
-    like_fovea_yes = 1/2
-    like_fovea_no = 1/2
-    sum_fovea_groove = 0
-
-    like_consp_hairy_opisthosoma = 1/4
-    like_patterned_opisthosoma = 1/4
-    like_unicolour_opisthosoma = 1/4
-    like_scutum_opisthosoma = 1/4
-    sum_opisthosoma_app = 0
-
-    like_multiple_dorsal_spine_femur = 1/3
-    like_none_dorsal_spine_femur = 1/3
-    like_one_dorsal_spine_femur = 1/3
-    sum_dorsal_spine_femur_count = 0
-    
-    like_procurved_eye = 1/3
-    like_recurved_eye = 1/3
-    like_straight_eye = 1/3
-    sum_posterior_eye_form = 0
-    
-    like_greater_than_d_pme = 1/3
-    like_less_than_d_pme  = 1/3
-    like_equal_to_d_pme = 1/3
-    sum_pme_separation_rel_to_d = 0
-    
-    like_complex_headregion = 1/5
-    like_inconsp_headregion = 1/5
-    like_sulci_headregion = 1/5
-    like_horn_headregion = 1/5
-    like_lobe_headregion  = 1/5
-    sum_headregion_m_app = 0
-    
-    like_eyes_normal = 1/2
-    like_eyes_reduced = 1/2
-    sum_eyes_app = 0
-    
-    like_about_the_same_ale = 1/3
-    like_greater_than_ale_ = 1/3
-    like_less_than_ale = 1/3        
-    sum_ame_rel_to_lateral = 0
-
-    like_multiple_prolateral_spine_femur = 1/3
-    like_none_prolateral_spine_femur = 1/3
-    like_one_prolateral_spine_femur = 1/3
-    sum_pro_spines_femur_count = 0
-
-    like_multiple_prolateral_spine_tibia = 1/3
-    like_none_prolateral_spine_tibia = 1/3
-    like_one_prolateral_spine_tibia = 1/3
-    sum_pro_spines_tibia_count = 0
-    
-    like_conspicuously_large_teeth = 1/2
-    like_unremarkable_teeth = 1/2
-    sum_ant_teeth_app = 0
-    
-    like_apophyses_consp_str_app = 1/3
-    like_none_consp_str_app = 1/3
-    like_spines_consp_str_app = 1/3
-    sum_consp_str_app = 0
-    
-    like_one_or_more_maxillae = 1/2
-    like_unremarkable_maxillae = 1/2
-    sum_maxillae_app = 0
-    
-    like_pitted_sternum = 1/3
-    like_rugose_sternum = 1/3
-    like_smooth_sternum = 1/3
-    sum_sternum_app = 0
-
-    like_sternum_yes = 1/2
-    like_sternum_no = 1/2
-    sum_sternum_coxae = 0
-    
-    like_distinctly_greater_sternum = 1/3
-    like_distinctly_smaller_sternum = 1/3
-    like_equal_sternum = 1/3
-    sum_sternum_width_coxae = 0
-    
-    #like_11, like_12, like_13, like_14, like_15 = 1/5
-    sum_tmi_rel_to_meta = 0
-    like_10_to_19 = 1/9
-    like_20_to_29 = 1/9
-    like_30_to_39 = 1/9
-    like_40_to_49 = 1/9
-    like_50_to_59 = 1/9
-    like_60_to_69 = 1/9
-    like_70_to_79 = 1/9
-    like_80_to_89 = 1/9
-    like_90_to_98 = 1/9
-    sum_tmi_range = 0
-    
-    like_tricho_present_metatarsus = 1/2
-    like_tricho_absent_metatarsus = 1/2
-    sum_meta_dorsal_tmiv = 0
-
-    like_multiple_dorsal_spine_metatarsus = 1/3
-    like_none_dorsal_spine_metatarsus = 1/3
-    like_one_dorsal_spine_metatarsus = 1/3
-    sum_dorsal_spine_meta_count = 0
-
-    like_one_dorsal_spine_tibia = 1/2
-    like_two_dorsal_spine_tibia = 1/2
-    sum_tibia_no_of_spine = 0
-
-    like_0000 = 1/6
-    like_0011 = 1/6
-    like_1111 = 1/6
-    like_2211 = 1/6
-    like_2221 = 1/6
-    like_2222 = 1/6
-    sum_tibia_spine_formula = 0
-
-    like_no_ventral_tibia_spines = 1/2
-    like_stout_ventral_tibia_spines = 1/2
-    sum_tibia_ventral = 0
-
-    like_m_pedipalp_unremarkable = 1/2
-    like_m_pedipalp_conspicuous = 1/2
-    sum_m_pedipalp_femur_app = 0
-
-    like_consp_swollen_patella = 1/4
-    like_unremarkable_patella = 1/4
-    like_apophyses_patella = 1/4
-    like_consp_spines_patella = 1/4
-    sum_m_pedipalp_patella_app = 0
-
-    like_unremarkable_tibia = 1/7
-    like_complex_tibia = 1/7
-    like_multiple_complex_tibia = 1/7
-    like_multiple_simple_tibia = 1/7
-    like_one_or_more_spines_tibia = 1/7
-    like_simple_tibia = 1/7
-    like_tufts_tibia = 1/7
-    sum_m_pedipalp_tibia_app = 0
-
-    like_margins_cymbium = 1/3
-    like_simple_cymbium = 1/3
-    like_elevations_cymbium = 1/3
-    sum_m_pedipalp_cymbium_app = 0
-
-    like_complex_paracym = 1/2
-    like_simple_paracym = 1/2
-    sum_m_pedipalp_paracymbium_form = 0
-
-    like_absent_para_branches = 1/2
-    like_present_para_branches = 1/2
-    sum_m_pedipalp_para_branches =0
-
-    like_consp_cir_embolus = 1/3
-    like_consp_curl_embolus = 1/3
-    like_unremarkable_embolus = 1/3
-    sum_m_pedipalp_embolus_app = 0
-
-    like_m_pedipalp_lamella_absent = 1/2
-    like_m_pedipalp_lamella_conspicuous = 1/2
-    sum_m_pedipalp_lamella = 0
-
-    like_consp_f_claw = 1/2
-    like_inconsp_f_claw = 1/2
-    sum_f_palp_claw = 0
-
-    like_unremarkable_epigyne = 1/6
-    like_atrium_epigyne = 1/6
-    like_septum_epigyne = 1/6
-    like_lateral_plate_epigyne = 1/6 
-    like_scape_epigyne = 1/6
-    like_parmula_epigyne = 1/6
-    sum_epigyne_app = 0
-
-    like_flat_epigyne = 1/2
-    like_protrud_epigyne = 1/2
-    sum_epigyne_form = 0
-
-    like_visible_seminal = 1/2
-    like_not_visible_seminal = 1/2
-    sum_epigyne_seminal = 0 
-
-    like_p44 = like_p45 = like_p46 = like_p47 = like_p48 = like_p49 = like_p50 = like_p51 = like_p52 = like_p53 = like_p54 = like_p55 = like_p56 = like_p57 = like_p58 = like_p59 = like_p60 = like_p61 = like_p62 = like_p63 = like_p64 = like_p65 = like_p66 = like_p67 = like_p68 = like_p69 = like_p70 = like_p71 = like_p72 = like_p73 = like_p74 = like_p75 = like_p76 = like_p77 = like_p78 = like_p79 = like_p80 = like_p81 = like_p82 = like_p83 = like_p84 = like_p85 = like_p86 = like_p87 = like_p88 = like_p89 = like_p90 = like_p91 = like_p92 = like_p93 = like_p94 = like_p95 = like_p96 = like_p97 = like_p98 = like_p99 = like_pmm = like_p101 = like_p102 = like_p103 = like_p104 = like_p105 = like_p106 = like_p107 = like_p108 = like_p109 = like_p110 = like_p111 = like_p112 = like_p113 = like_p115 = like_p116 = like_p117 = like_p118 = like_p119 = like_p120 = like_p121 = like_p122 = like_p125 = like_p126 = like_p127 = like_p128 = like_p130 = like_p132 = like_p134 = like_p135 = like_p138 = like_p140 = like_p141 = like_p142 = like_p145 = like_p147 = like_p150 = like_p155 = like_p158 = like_p160 = like_p162 = like_p165 = like_p166 = like_p170 = like_p175 = like_p180 = like_p185 = like_p190 = like_p195 = like_p198 = like_p200 = like_p205 = like_p209 = like_p210 = like_p215 = like_p220 = like_p225 = like_p230 = like_p240 = like_p250 = like_p300 = 1/111
-    sum_length_p = 0
-
-    like_40_to_60 = 1/13
-    like_60_to_80 = 1/13
-    like_80_to_100 = 1/13
-    like_100_to_120 = 1/13
-    like_120_to_140 = 1/13
-    like_140_to_160 = 1/13
-    like_160_to_180 = 1/13
-    like_180_to_200 = 1/13
-    like_200_to_220 = 1/13
-    like_220_to_240 = 1/13
-    like_240_to_260 = 1/13
-    like_260_to_280 = 1/13
-    like_280_to_300 = 1/13
-    sum_length_p_range = 0 
 
     countries =  ["Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Faroe Islands", "Finland", "France", "France / Corsica", "Georgia", "Germany", "Gibraltar (UK)", "Greece", "Greece / Crete", "Hungary", "Iceland", "Ireland", "Italy", "Italy / Sardinia", "Italy / Sicily", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Montenegro", "Netherlands", "Northern Island", "Norway", "Poland", "Portugal", "Romania", "Russia, Central", "Russia, Eastern", "Russia, Franz Jozef Land", "Russia, Kaliningrad Region", "Russia, Northern", "Russia, Novaya Zemlya", "Russia, Southern", "Russia, Western", "Serbia", "Slovakia", "Slovenia", "Spain", "Spain / Balearic Islands", "Svalbard", "Sweden", "Switzerland", "Turkey (Asia)", "Turkey (Europe)", "Ukraine", "United Kingdom"]
 
-    sum_sex = 0
+    
     for line in lines:
         dict = {}
         species_name = line[0]
@@ -296,6 +81,10 @@ with open("Ext1531csv.csv", "r") as csvread:
         # print(fovea_as_groove)
         #print("here", species_name, sex, OA, length_p, length_p_range, length_femur_p, prosoma_app, fovea_as_groove, opisthosoma_app, dorsal_spine_femur_count, posterior_eye_form, pme_separation_rel_to_d, headregion_m_app, eyes_app, ame_rel_to_lateral, pro_spines_femur_count, pro_spines_tibia_count, ant_teeth_app, consp_str_app, maxillae_app, sternum_app, sternum_coxae, sternum_width_coxae, tmi_rel_to_meta, tmi_range, meta_dorsal_tmiv, dorsal_spine_meta_count, tibia_no_of_spine, tibia_spine_formula, tibia_ventral, m_pedipalp_femur_app, m_pedipalp_patella_app, m_pedipalp_tibia_app, m_pedipalp_cymbium_app, m_pedipalp_paracymbium_form, m_pedipalp_para_branches, m_pedipalp_embolus_app, m_pedipalp_lamella, f_palp_claw, epigyne_app, epigyne_form, epigyne_seminal, desc, dist)
 
+        like_male = 1/2
+        like_female = 1/2
+        sum_sex = 0
+
         if sex == "Male":
             like_male = 0.9
             like_female = 0.1
@@ -322,6 +111,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Sex_Female)"] = like_female
             dict["Sum P(Sex)"] = sum_sex
 
+        like_igd = 1/4
+        like_bro = 1/4
+        like_clp = 1/4
+        like_pgc = 1/4
+        sum_OA = 0
+    
         if OA == "inconspicuous, generally dark":
             like_igd = 0.9
             like_bro = 0.001
@@ -380,6 +175,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Overall Appearance_pale, ground or cave dweller)"] = like_pgc
             dict["Sum of P(OA)"] = sum_OA
 
+        
+        like_equal_to_prosoma = 1/3
+        like_longer_than_prosoma = 1/3
+        like_shorter_than_prosoma = 1/3
+        sum_length_femur_p = 0
+    
         if length_femur_p == "equal in length":
             like_equal_to_prosoma = 0.9
             like_longer_than_prosoma = 0.05
@@ -419,6 +220,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Length of femur I :<relative to prosoma>_shorter than prosoma)"] = like_shorter_than_prosoma
             dict["Sum of P(Length of femur I :<relative to prosoma>)"] = sum_length_femur_p
 
+        like_inconsp_prosoma = 1/4
+        like_margins_with_teeth = 1/4
+        like_consp_hair = 1/4
+        like_pits = 1/4
+        sum_prosoma_app=0
+    
         if prosoma_app == "inconspicuous":
             like_inconsp_prosoma = 0.8
             like_margins_with_teeth = 0.2/3
@@ -477,6 +284,10 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Prosoma <appearance>_with pits (dorsally))"] = like_pits
             dict["Sum of P(Prosoma <appearance>)"] = sum_prosoma_app
 
+        like_fovea_yes = 1/2
+        like_fovea_no = 1/2
+        sum_fovea_groove = 0
+    
         if fovea_as_groove == "yes":
             like_fovea_yes = 0.8
             like_fovea_no = 0.2
@@ -500,6 +311,13 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Fovea as darkened groove_no)"] = like_fovea_no
             dict["Sum P(Fovea Groove)"] = sum_fovea_groove
 
+        
+        like_consp_hairy_opisthosoma = 1/4
+        like_patterned_opisthosoma = 1/4
+        like_unicolour_opisthosoma = 1/4
+        like_scutum_opisthosoma = 1/4
+        sum_opisthosoma_app = 0
+    
         if opisthosoma_app == "conspicuously hairy":
             like_consp_hairy_opisthosoma = 0.9
             like_patterned_opisthosoma = 0.09
@@ -525,7 +343,7 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Opisthosoma <appearance>_unicolourous, inconspicuous)"] = like_unicolour_opisthosoma
             dict["P(X | Opisthosoma <appearance>_with scutum)"] = like_scutum_opisthosoma
             dict["Sum of P(Opisthosoma <appearance>)"] = sum_opisthosoma_app
-        elif opisthosoma_app == "unicolourous, inconspicuous":
+        elif opisthosoma_app == "unicolorous, inconspicuous":
             like_consp_hairy_opisthosoma = 0.033
             like_patterned_opisthosoma = 0.033
             like_unicolour_opisthosoma = 0.9
@@ -558,6 +376,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Opisthosoma <appearance>_with scutum)"] = like_scutum_opisthosoma
             dict["Sum of P(Opisthosoma <appearance>)"] = sum_opisthosoma_app
 
+        
+        like_multiple_dorsal_spine_femur = 1/3
+        like_none_dorsal_spine_femur = 1/3
+        like_one_dorsal_spine_femur = 1/3
+        sum_dorsal_spine_femur_count = 0
+        
         if dorsal_spine_femur_count == "multiple":
             like_multiple_dorsal_spine_femur = 0.7
             like_none_dorsal_spine_femur = 0.09
@@ -596,6 +420,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Dorsal spines on femur I: <count>_one)"] = like_one_dorsal_spine_femur
             dict["Sum P(Dorsal spines on femur I: <count>)"] = sum_dorsal_spine_femur_count
 
+        like_procurved_eye = 1/3
+        like_recurved_eye = 1/3
+        like_straight_eye = 1/3
+        sum_posterior_eye_form = 0
+        
         if posterior_eye_form == "procurved":
             like_procurved_eye = 0.8
             like_recurved_eye = 0.04
@@ -640,7 +469,7 @@ with open("Ext1531csv.csv", "r") as csvread:
         sum_pme_separation_rel_to_d = 0
 
         if pme_separation_rel_to_d == "distinctly greater than d":
-            like_greater_than_d_pme_ = 0.7
+            like_greater_than_d_pme = 0.7
             like_less_than_d_pme = 0.09
             like_equal_to_d_pme = 0.21
             sum_pme_separation_rel_to_d = like_greater_than_d_pme + like_less_than_d_pme + like_equal_to_d_pme
@@ -650,7 +479,7 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Posterior median eye (PME) separation: <relative to diameter (d)>_equal to d)"] = like_equal_to_d_pme
             dict["Sum P(Posterior median eye (PME) separation: <relative to diameter (d)>)"] =sum_pme_separation_rel_to_d
         elif pme_separation_rel_to_d == "distinctly less than d":
-            like_greater_than_d_pme_ = 0.09
+            like_greater_than_d_pme = 0.09
             like_less_than_d_pme = 0.7
             like_equal_to_d_pme = 0.21
             sum_pme_separation_rel_to_d = like_greater_than_d_pme + like_less_than_d_pme + like_equal_to_d_pme
@@ -660,7 +489,7 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Posterior median eye (PME) separation: <relative to diameter (d)>_equal to d)"] = like_equal_to_d_pme
             dict["Sum P(Posterior median eye (PME) separation: <relative to diameter (d)>)"] =sum_pme_separation_rel_to_d
         elif pme_separation_rel_to_d == "equal to d":
-            like_greater_than_d_pme_ = 0.15
+            like_greater_than_d_pme = 0.15
             like_less_than_d_pme = 0.15
             like_equal_to_d_pme = 0.7
             sum_pme_separation_rel_to_d = like_greater_than_d_pme + like_less_than_d_pme + like_equal_to_d_pme
@@ -677,6 +506,13 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Posterior median eye (PME) separation: <relative to diameter (d)>_equal to d)"] = like_equal_to_d_pme
             dict["Sum P(Posterior median eye (PME) separation: <relative to diameter (d)>)"] =sum_pme_separation_rel_to_d
 
+        like_complex_headregion = 1/5
+        like_inconsp_headregion = 1/5
+        like_sulci_headregion = 1/5
+        like_horn_headregion = 1/5
+        like_lobe_headregion  = 1/5
+        sum_headregion_m_app = 0
+        
         if headregion_m_app == "complex":
             like_complex_headregion = 0.7
             like_inconsp_headregion = 0.027
@@ -757,6 +593,10 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Headregion of male: <appearance>_with lobe (simple))"] = like_lobe_headregion
             dict["Sum P(Headregion of male: <appearance>)"] = sum_headregion_m_app
 
+        like_eyes_normal = 1/2
+        like_eyes_reduced = 1/2
+        sum_eyes_app = 0
+        
         if eyes_app == "normal":
             like_eyes_normal = 0.8
             like_eyes_reduced = 0.2
@@ -766,8 +606,8 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Eyes: <appearance>_reduced)"] = like_eyes_reduced
             dict["Sum P(Eyes: <appearance>)"] = sum_eyes_app
         elif eyes_app == "reduced":
-            like_eyes_normal = 0.8
-            like_eyes_reduced = 0.2
+            like_eyes_normal = 0.2
+            like_eyes_reduced = 0.8
             sum_eyes_app = like_eyes_normal + like_eyes_reduced 
             dict["Eyes: <appearance>"] = eyes_app
             dict["P(X | Eyes: <appearance>_normal)"] = like_eyes_normal
@@ -779,6 +619,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Eyes: <appearance>_normal)"] = like_eyes_normal
             dict["P(X | Eyes: <appearance>_reduced)"] = like_eyes_reduced
             dict["Sum P(Eyes: <appearance>)"] = sum_eyes_app
+
+        
+        like_about_the_same_ale = 1/3
+        like_greater_than_ale_ = 1/3
+        like_less_than_ale = 1/3        
+        sum_ame_rel_to_lateral = 0
 
         if ame_rel_to_lateral == "about the same as ALE":
             like_about_the_same_ale = 0.8
@@ -818,6 +664,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Anterior median eyes: <size relative to anterior lateral eyes ALE>_distinctly smaller than ALE)"] = like_less_than_ale
             dict["Sum(Anterior median eyes: <size relative to anterior lateral eyes ALE>)"] =sum_ame_rel_to_lateral
 
+        like_multiple_prolateral_spine_femur = 1/3
+        like_none_prolateral_spine_femur = 1/3
+        like_one_prolateral_spine_femur = 1/3
+        sum_pro_spines_femur_count = 0
+    
         if pro_spines_femur_count == "multiple":
             like_multiple_prolateral_spine_femur = 0.7
             like_none_prolateral_spine_femur = 0.09
@@ -856,6 +707,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Prolateral spines on femur I: <count>_one)"] = like_one_prolateral_spine_femur
             dict["Sum P(Prolateral spines on femur I: <count>)"] = sum_pro_spines_femur_count
 
+        
+        like_multiple_prolateral_spine_tibia = 1/3
+        like_none_prolateral_spine_tibia = 1/3
+        like_one_prolateral_spine_tibia = 1/3
+        sum_pro_spines_tibia_count = 0
+        
         if pro_spines_tibia_count == "multiple":
             like_multiple_prolateral_spine_tibia = 0.7
             like_none_prolateral_spine_tibia = 0.09
@@ -894,6 +751,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Prolateral spines on tibia I: <count>_one)"] = like_one_prolateral_spine_tibia
             dict["Sum P(Prolateral spines on tibia I: <count>)"] = sum_pro_spines_tibia_count
 
+        
+        like_conspicuously_large_teeth = 1/2
+        like_unremarkable_teeth = 1/2
+        sum_ant_teeth_app = 0
+        
         if ant_teeth_app == "conspicuously large":
             like_conspicuously_large_teeth = 0.8
             like_unremarkable_teeth = 0.2
@@ -917,6 +779,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Anterior cheliceral teeth: <appearance>_unremarkable in size)"] = like_unremarkable_teeth
             dict["Sum P(Anterior cheliceral teeth: <appearance>)"] = sum_ant_teeth_app
 
+        
+        like_apophyses_consp_str_app = 1/3
+        like_none_consp_str_app = 1/3
+        like_spines_consp_str_app = 1/3
+        sum_consp_str_app = 0
+    
         if consp_str_app == "apophyses/teeth-like processes/tubercles":
             like_apophyses_consp_str_app = 0.7
             like_none_consp_str_app = 0.09
@@ -955,6 +823,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Conspicuous structures on chelicerae: <appearance>_spines)"] = like_spines_consp_str_app
             dict["Sum P(Conspicuous structures on chelicerae: <appearance>)"] = sum_consp_str_app
 
+        
+        like_one_or_more_maxillae = 1/2
+        like_unremarkable_maxillae = 1/2
+        sum_maxillae_app = 0
+        
         if maxillae_app == "one or more teeth/tubercles":
             like_one_or_more_maxillae = 0.7
             like_unremarkable_maxillae = 0.3
@@ -978,6 +851,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Maxillae: <appearance>_unremarkable)"] = like_unremarkable_maxillae
             dict["Sum P(Maxillae: <appearance>)"] = sum_maxillae_app
 
+        
+        like_pitted_sternum = 1/3
+        like_rugose_sternum = 1/3
+        like_smooth_sternum = 1/3
+        sum_sternum_app = 0
+    
         if sternum_app == "pitted":
             like_pitted_sternum = 0.9
             like_rugose_sternum = 0.09
@@ -1016,6 +895,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Sternum: <appearance>_smooth)"] = like_smooth_sternum
             dict["Sum P(Sternum: <appearance>)"] = sum_sternum_app
 
+        
+        like_sternum_yes = 1/2
+        like_sternum_no = 1/2
+        sum_sternum_coxae = 0
+        
         if sternum_coxae == "yes":
             like_sternum_yes = 0.8
             like_sternum_no = 0.2
@@ -1039,6 +923,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Sternum: <extends between coxae IV>_no)"] = like_sternum_no
             dict["Sum P(Sternum: <extends between coxae IV>)"] = sum_sternum_coxae
 
+        
+        like_distinctly_greater_sternum = 1/3
+        like_distinctly_smaller_sternum = 1/3
+        like_equal_sternum = 1/3
+        sum_sternum_width_coxae = 0
+        
         if sternum_width_coxae == "distinctly greater than d":
             like_distinctly_greater_sternum = 0.7
             like_distinctly_smaller_sternum = 0.09
@@ -1077,6 +967,20 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Width of sternum between coxae IV: <relative to width of coxae IV (d)>_equal to d)"] = like_equal_sternum
             dict["Sum P(Width of sternum between coxae IV: <relative to width of coxae IV (d)>)"] = sum_sternum_width_coxae
 
+        
+        #like_11, like_12, like_13, like_14, like_15 = 1/5
+        sum_tmi_rel_to_meta = 0
+        like_10_to_19 = 1/9
+        like_20_to_29 = 1/9
+        like_30_to_39 = 1/9
+        like_40_to_49 = 1/9
+        like_50_to_59 = 1/9
+        like_60_to_69 = 1/9
+        like_70_to_79 = 1/9
+        like_80_to_89 = 1/9
+        like_90_to_98 = 1/9
+        sum_tmi_range = 0
+        
         if tmi_range == "0.10-0.19":
             like_10_to_19 = 0.9
             like_20_to_29 = 0.09
@@ -1289,6 +1193,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Position of TmI by range: <relative to metatarsus>_0.90-0.98)"] = like_90_to_98
             dict["Sum P(Position of TmI by range: <relative to metatarsus>)"] = sum_tmi_range
 
+        
+        like_tricho_present_metatarsus = 1/2
+        like_tricho_absent_metatarsus = 1/2
+        sum_meta_dorsal_tmiv = 0
+
         if meta_dorsal_tmiv == "trichobothrium present":
             like_tricho_present_metatarsus = 0.8
             like_tricho_absent_metatarsus = 0.2
@@ -1312,6 +1221,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Metatarsus IV dorsally: <presence of trichobothrium (TmIV)>_trichobothrium absent)"] = like_tricho_absent_metatarsus
             dict["Sum P(Metatarsus IV dorsally: <presence of trichobothrium (TmIV)>)"] = sum_meta_dorsal_tmiv
 
+        like_multiple_dorsal_spine_metatarsus = 1/3
+        like_none_dorsal_spine_metatarsus = 1/3
+        like_one_dorsal_spine_metatarsus = 1/3
+        sum_dorsal_spine_meta_count = 0
+    
         if dorsal_spine_meta_count == "multiple":
             like_multiple_dorsal_spine_metatarsus = 0.7
             like_none_dorsal_spine_metatarsus = 0.09
@@ -1350,6 +1264,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Dorsal spines on metatarsus I: <count>_one)"] = like_one_dorsal_spine_metatarsus
             dict["Sum P(Dorsal spines on metatarsus I: <count>)"] = sum_dorsal_spine_meta_count
 
+        
+        like_one_dorsal_spine_tibia = 1/2
+        like_two_dorsal_spine_tibia = 1/2
+        sum_tibia_no_of_spine = 0
+    
         if tibia_no_of_spine == "one dorsal spine":
             like_one_dorsal_spine_tibia = 0.8
             like_two_dorsal_spine_tibia = 0.2
@@ -1373,6 +1292,15 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Tibia IV: <number of dorsal spines>_two dorsal spines)"] = like_two_dorsal_spine_tibia
             dict["Sum P(Tibia IV: <number of dorsal spines>)"] = sum_tibia_no_of_spine
 
+        
+        like_0000 = 1/6
+        like_0011 = 1/6
+        like_1111 = 1/6
+        like_2211 = 1/6
+        like_2221 = 1/6
+        like_2222 = 1/6
+        sum_tibia_spine_formula = 0
+    
         if tibia_spine_formula == "0":
             like_0000 = 0.8
             like_0011 = 0.16
@@ -1480,6 +1408,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Numbers of dorsal spines on tibia I, II, III, IV: <tibial spine formula>_2222)"] = like_2222
             dict["Sum P(Numbers of dorsal spines on tibia I, II, III, IV: <tibial spine formula>)"] = sum_tibia_spine_formula
 
+        
+        like_no_ventral_tibia_spines = 1/2
+        like_stout_ventral_tibia_spines = 1/2
+        sum_tibia_ventral = 0
+    
         if tibia_ventral == "no spines":
             like_no_ventral_tibia_spines = 0.7
             like_stout_ventral_tibia_spines = 0.3
@@ -1503,6 +1436,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Tibia I-II ventrally: <presence of spines>_stout spines in two rows)"] = like_stout_ventral_tibia_spines
             dict["Sum P(Tibia I-II ventrally: <presence of spines>)"] = sum_tibia_ventral
 
+        
+        like_m_pedipalp_unremarkable = 1/2
+        like_m_pedipalp_conspicuous = 1/2
+        sum_m_pedipalp_femur_app = 0
+    
         if m_pedipalp_femur_app == "unremarkable":
             like_m_pedipalp_unremarkable = 0.9
             like_m_pedipalp_conspicuous = 0.1
@@ -1526,6 +1464,13 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: femur <appearance>_conspicuous)"] = like_m_pedipalp_conspicuous
             dict["Sum P(Male pedipalp: femur <appearance>)"] = sum_m_pedipalp_femur_app
 
+        
+        like_consp_swollen_patella = 1/4
+        like_unremarkable_patella = 1/4
+        like_apophyses_patella = 1/4
+        like_consp_spines_patella = 1/4
+        sum_m_pedipalp_patella_app = 0
+    
         if m_pedipalp_patella_app == "conspicuously swollen":
             like_consp_swollen_patella = 0.7
             like_unremarkable_patella = 0.21
@@ -1583,6 +1528,16 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: patella <appearance>_with conspicuous spines (single or tufts))"] = like_consp_spines_patella
             dict["Sum P(Male pedipalp: patella <appearance>)"] = sum_m_pedipalp_patella_app
 
+        
+        like_unremarkable_tibia = 1/7
+        like_complex_tibia = 1/7
+        like_multiple_complex_tibia = 1/7
+        like_multiple_simple_tibia = 1/7
+        like_one_or_more_spines_tibia = 1/7
+        like_simple_tibia = 1/7
+        like_tufts_tibia = 1/7
+        sum_m_pedipalp_tibia_app = 0
+    
         if m_pedipalp_tibia_app == "unremarkable":
             like_unremarkable_tibia = 0.6
             like_complex_tibia = 0.0666666667
@@ -1721,7 +1676,13 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: tibia <appearance>_with tufts of hair or spines)"] = like_tufts_tibia
             dict["Sum P(Male pedipalp: tibia <appearance>)"] = sum_m_pedipalp_tibia_app
 
-        if m_pedipalp_cymbium_app == "margins with notches/bulges":
+        
+        like_margins_cymbium = 1/3
+        like_simple_cymbium = 1/3
+        like_elevations_cymbium = 1/3
+        sum_m_pedipalp_cymbium_app = 0
+    
+        if m_pedipalp_cymbium_app == "margin with notches/bulges":
             like_margins_cymbium = 0.7
             like_simple_cymbium = 0.09
             like_elevations_cymbium = 0.21
@@ -1759,6 +1720,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: cymbium <appearance>_with dorsal projections/conical elevations"] = like_elevations_cymbium
             dict["Sum P(Male pedipalp: cymbium <appearance>)"] = sum_m_pedipalp_cymbium_app
 
+        
+        like_complex_paracym = 1/2
+        like_simple_paracym = 1/2
+        sum_m_pedipalp_paracymbium_form = 0
+    
         if m_pedipalp_paracymbium_form == "complex":
             like_complex_paracym = 0.7
             like_simple_paracym = 0.3
@@ -1782,6 +1748,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: paracymbium <form>_simple)"] = like_simple_paracym
             dict["Sum P(Male pedipalp: paracymbium <form>)"] = sum_m_pedipalp_paracymbium_form
 
+        
+        like_absent_para_branches = 1/2
+        like_present_para_branches = 1/2
+        sum_m_pedipalp_para_branches =0
+    
         if m_pedipalp_para_branches == "teeth absent":
             like_absent_para_branches = 0.7
             like_present_para_branches = 0.3
@@ -1805,6 +1776,12 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: branches of paracymbium <presence of teeth>_teeth present)"] = like_present_para_branches
             dict["Sum P(Male pedipalp: branches of paracymbium <presence of teeth>)"] = sum_m_pedipalp_para_branches
 
+        
+        like_consp_cir_embolus = 1/3
+        like_consp_curl_embolus = 1/3
+        like_unremarkable_embolus = 1/3
+        sum_m_pedipalp_embolus_app = 0
+    
         if m_pedipalp_embolus_app == "conspicuous, circular":
             like_consp_cir_embolus = 0.7
             like_consp_curl_embolus = 0.21
@@ -1843,6 +1820,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: embolus <appearance>_unremarkable)"] = like_unremarkable_embolus
             dict["Sum P(Male pedipalp: embolus <appearance>)"] = sum_m_pedipalp_embolus_app    
 
+        
+        like_m_pedipalp_lamella_absent = 1/2
+        like_m_pedipalp_lamella_conspicuous = 1/2
+        sum_m_pedipalp_lamella = 0
+    
         if m_pedipalp_lamella == "absent":
             like_m_pedipalp_lamella_absent = 0.7
             like_m_pedipalp_lamella_conspicuous = 0.3
@@ -1866,6 +1848,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Male pedipalp: lamella characteristica <presence>_conspicuous)"] = like_m_pedipalp_lamella_conspicuous
             dict["Sum P(Male pedipalp: lamella characteristica <presence>)"] = sum_m_pedipalp_lamella
 
+        
+        like_consp_f_claw = 1/2
+        like_inconsp_f_claw = 1/2
+        sum_f_palp_claw = 0
+    
         if f_palp_claw == "conspicuous":
             like_consp_f_claw = 0.8
             like_inconsp_f_claw = 0.2
@@ -1874,7 +1861,7 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Female palp: claw <presence>_conspicuous)"] = like_consp_f_claw
             dict["P(X | Female palp: claw <presence>_not present/ inconspicuous)"] = like_inconsp_f_claw
             dict["Sum P(Female palp: claw <presence>)"] = sum_f_palp_claw
-        elif f_palp_claw == "not present/ inconspicuous":
+        elif f_palp_claw == "not present/inconspicuous":
             like_consp_f_claw = 0.2
             like_inconsp_f_claw = 0.8
             sum_f_palp_claw = like_consp_f_claw + like_inconsp_f_claw
@@ -1896,7 +1883,7 @@ with open("Ext1531csv.csv", "r") as csvread:
         like_scape_epigyne = 1/6
         like_parmula_epigyne = 1/6
         sum_epigyne_app = 0
-
+    
         if epigyne_app == "unremarkable":
             like_unremarkable_epigyne = 0.7
             like_atrium_epigyne = 0.06
@@ -1961,7 +1948,7 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Epigyne: <appearance>_with scape(from anterior margin))"] = like_scape_epigyne
             dict["P(X | Epigyne: <appearance>_with parmula(from posterior margin))"] = like_parmula_epigyne
             dict["Sum P(Epigyne: <appearance>)"] = sum_epigyne_app
-        elif epigyne_app == "with scape(from anterior margin)":
+        elif epigyne_app == "with scape (from anterior margin)":
             like_unremarkable_epigyne = 0.027
             like_atrium_epigyne = 0.021
             like_septum_epigyne = 0.021
@@ -2004,6 +1991,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Epigyne: <appearance>_with parmula(from posterior margin))"] = like_parmula_epigyne
             dict["Sum P(Epigyne: <appearance>)"] = sum_epigyne_app
 
+        
+        like_flat_epigyne = 1/2
+        like_protrud_epigyne = 1/2
+        sum_epigyne_form = 0
+    
         if epigyne_form == "flat":
             like_flat_epigyne = 0.7
             like_protrud_epigyne = 0.3
@@ -2026,6 +2018,11 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Epigyne: <form>_flat)"] = like_flat_epigyne
             dict["P(X | Epigyne: <form>_protrudes)"] = like_protrud_epigyne
             dict["Sum P(Epigyne: <form>)"] = sum_epigyne_form    
+
+        
+        like_visible_seminal = 1/2
+        like_not_visible_seminal = 1/2
+        sum_epigyne_seminal = 0 
 
         if epigyne_seminal == "underlying structures (e.g., seminal receptacles) not visible":
             like_visible_seminal = 0.2
@@ -2059,7 +2056,21 @@ with open("Ext1531csv.csv", "r") as csvread:
             else:
                 probab_country = 0.00015873
                 dict[f"P(X | Distribution_{country})"] = probab_country
-
+    
+        like_40_to_60 = 1/13
+        like_60_to_80 = 1/13
+        like_80_to_100 = 1/13
+        like_100_to_120 = 1/13
+        like_120_to_140 = 1/13
+        like_140_to_160 = 1/13
+        like_160_to_180 = 1/13
+        like_180_to_200 = 1/13
+        like_200_to_220 = 1/13
+        like_220_to_240 = 1/13
+        like_240_to_260 = 1/13
+        like_260_to_280 = 1/13
+        like_280_to_300 = 1/13
+        sum_length_p_range = 0 
         if length_p_range == "0.4-0.6":
             like_40_to_60 = 0.9
             like_60_to_80 = like_80_to_100 = 0.09/2
@@ -2390,6 +2401,8 @@ with open("Ext1531csv.csv", "r") as csvread:
             dict["P(X | Length of prosoma by range [mm]_2.8-3.0)"] = like_280_to_300
             dict["Sum P(Length of prosoma by range [mm])"] = sum_length_p_range
 
+        like_p44 = like_p45 = like_p46 = like_p47 = like_p48 = like_p49 = like_p50 = like_p51 = like_p52 = like_p53 = like_p54 = like_p55 = like_p56 = like_p57 = like_p58 = like_p59 = like_p60 = like_p61 = like_p62 = like_p63 = like_p64 = like_p65 = like_p66 = like_p67 = like_p68 = like_p69 = like_p70 = like_p71 = like_p72 = like_p73 = like_p74 = like_p75 = like_p76 = like_p77 = like_p78 = like_p79 = like_p80 = like_p81 = like_p82 = like_p83 = like_p84 = like_p85 = like_p86 = like_p87 = like_p88 = like_p89 = like_p90 = like_p91 = like_p92 = like_p93 = like_p94 = like_p95 = like_p96 = like_p97 = like_p98 = like_p99 = like_pmm = like_p101 = like_p102 = like_p103 = like_p104 = like_p105 = like_p106 = like_p107 = like_p108 = like_p109 = like_p110 = like_p111 = like_p112 = like_p113 = like_p115 = like_p116 = like_p117 = like_p118 = like_p119 = like_p120 = like_p121 = like_p122 = like_p125 = like_p126 = like_p127 = like_p128 = like_p130 = like_p132 = like_p134 = like_p135 = like_p138 = like_p140 = like_p141 = like_p142 = like_p145 = like_p147 = like_p150 = like_p155 = like_p158 = like_p160 = like_p162 = like_p165 = like_p166 = like_p170 = like_p175 = like_p180 = like_p185 = like_p190 = like_p195 = like_p198 = like_p200 = like_p205 = like_p209 = like_p210 = like_p215 = like_p220 = like_p225 = like_p230 = like_p240 = like_p250 = like_p300 = 1/111
+        sum_length_p = 0
         if length_p == "0.44":
             like_p44 = 0.9
             like_p45 = like_p46 = like_p47 = like_p48 = like_p49 = like_p50 = like_p51 = like_p52 = like_p53 = like_p54 = 0.09/10
