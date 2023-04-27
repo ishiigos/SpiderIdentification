@@ -860,60 +860,69 @@
             </div>
             <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
                 <h2>Help & Information:</h2>
-                -----------------------------------------<b>Introduction to the
-                    key</b>------------------------------------------
+                <h4>Introduction to the
+                    key</h4>
                 <p>
                     This linyphiid multi-entry interactive key incorporates Bayes’ theorem with typical interactive
                     identification key features. Incorporation of Bayes’ theorem facilitates accuracy and efficiency in
                     the calculation of posterior probability values for each species; returning the most probable
                     species at the top of the list followed by species with decreasing probabilities.
                 </p>
-                ----------------------------------------------------<b>Usage</b>-----------------------------------------------------
+                <h4>Usage</h4>
                 <p>
-                    // (Help Image? With the UI and number labels such that each component can be explained with that?
-                    Should we do that?)
-                <ol>
-                    <li>User may select desired character and character state subsequently making use of the dropdown on
-                        the “Spiders” tab. </li>
-                    <li>Once a Characteristic is selected, corresponding character states are loaded in the second
-                        dropdown menu so the selection may be completed & locked.</li>
-                    <li>The ‘+’ button allows addition of dropdown menus allowing further selection.</li>
-                    <li>Based on user selection:
-                        <ol type="a">
-                            <li>The bubble chart represents posterior probabilities of the species indicated with the
-                                size of the bubble. The summary alongside acts as a counter of the number of species
-                                with a particular probability.</li>
-                            <li>The list of spider species with an updated posterior probabilities in decreasing order.
-                            </li>
-                        </ol>
-                    </li>
-                    <li>The “dustbin” icon acts as a remove button in order to remove a selected character state.</li>
-                    <li>The “Remove all” button acts as a reset button.</li>
-                </ol>
+                    <img src="./UILegends.jpg" alt="Legends for UI"/>
+                    <ol>
+                        <li>Spiders tab: This is the main window responsible for the computational aspect of the interactive identification key. This window allows user interaction and selection of spider characteristics. The selection of characteristic leads to calculation of species posterior probabilities and display of results in chart as well as tabular format.</li>
+                        <li>Filter box: This feature is the main form of user interaction for calculation of posterior probabilities of the linyphiidae species. The user may select, add, remove characteristics, and reset the tool.
+                            <ul type="none">
+                                <li>2a. Select characteristic dropdown: This dropdown option allows the user to select the characteristic for which species posterior probabilities are to be calculated. </li>
+                                <li>2b. Select value dropdown: Upon selection of a characteristic, subsequent values are loaded in this second dropdown. When selected, the dropdown menus are disabled and calculations reflected in the chart, summary, and main results table.</li>
+                                <li>2c. Add filter button: Once the first characteristic-value combination is selected, the add button allows the user to add a filter for selection of a second characteristic. In case the user tries to add a second characteristic without selection, a warning alert is generated at the bottom right with instructions.</li>
+                                <li>2d. Remove filter button: The remove filter button allows the user to delete a selected characteristic without resetting the entire tool. After a confirmation to delete said characteristic, the posterior probabilities for the species are recalculated from the last characteristic.</li>
+                                <li>2e. Remove all button: This button works like a page refresh that allows the user to reset the tool without entirely restarting the API.</li>
+                            </ul>
+                        </li>
+                        <li>Visualisation component – Bubble chart: This feature of the interactive key helps visualisation of species posterior probabilities. The big bubble enclosing smaller bubbles represent the total probability of the species population. This is equal to 1. The size of each bubble was representative of the posterior probabilities of species. The initial prior of the species was 1/1531, where 1531 was the total number of species in the study. Upon updating a characteristic evidence, species posterior probabilities are calculated and the size of the respective bubbles modified as per the probabilities. The size of the bubble increases with increasing probability and vice-versa. Hovering over the bubble allows the user to view the name of the species and its corresponding posterior probability.</li>
+                        <li>Summary table: This table present alongside the visualisation component of the application categorises the results of the bubble chart based on species probabilities. A comprehensive summary of the number of species within a specific probability is listed. This allows keeping count of species with the highest probabilities.</li>
+                        <li>Results table: This results table is generated using the DataTable library in JavaScript to display the species name and posterior probabilities. Upon initialisation of the application, the results table is sorted in alphabetical order as species probabilities are equal. As calculations based on selected characteristics are performed, the results table rearranges according to a decreasing order of posterior probabilities. 
+                            <ul type="none">
+                                <li>5a. Show entry dropdown: This dropdown menu features an option for the user to select the number of entries in the results table. Options included – 10, 25, 50, and 100 entries per page.</li>
+                                <li>5b. Search box: This search box allows the user to look for specific species using their names and/or posterior probabilities.</li>
+                                <li>5d. Sorting icons: These icons present above each column of the results table allow the user to sort results as per their convenience: alphabetically, increasing/decreasing order of posterior probabilities, and serial numbers.</li>
+                            </ul>
+                        </li>
+                        <li>Help & Information tab: This tab comprises information regarding the tool, its usage, and a help section with description of spider characteristics.</li>
+                        <li>Unlabelled/Invisible features:
+                            <ul type="none">
+                                <li>Toastr: Three types of notification alerts were added to facilitate communication with the user in cases of successful iteration (green), warning message (yellow), and fatal error (red). </li>
+                                <li>Show details pop-up: Upon clicking on a species name in the results table, a pop-up window consisting of all characteristics associated with the species is opened. This made viewing species specific traits possible.</li>
+                            </ul>
+                        </li>
+                    </ol>
                 </p>
-                ----------------<b>Brief description of linyphiid anatomy (to aid selection of
-                    traits)</b>---------------
-                <p>Overall Appearance: The overall visual appearance of the spider ranging from pale, contrasting,
+                <h4>Brief description of linyphiid anatomy (to aid selection of
+                    traits)</h4>
+                <p><b>Overall Appearance:</b> The overall visual appearance of the spider ranging from pale, contrasting,
                     bright, to unidentifiable.</p>
-                <p>Prosoma: The cephalothorax region of the spider consisting of the head and thorax. This serves as a
+                <p><b>Prosoma:</b> The cephalothorax region of the spider consisting of the head and thorax. This serves as a
                     point of attachment to various other characteristics like eyes, pedipalps, chelicerae, fovea, legs.
                     (Internal organs and structures are out of scope for the purpose of this key)</p>
-                <p>Fovea: Depression formed at the thorax region of the spider.</p>
-                <p>Eye row: The formation of the eyes may be:
+                <p><b>Fovea:</b> Depression formed at the thorax region of the spider.</p>
+                <p><b>Eye row:</b> The formation of the eyes may be:
                 <ol type="a">
                     <li>Procurved: Eyes curving towards the thorax.</li>
                     <li>Recurved: Eyes curving away from the thorax</li>
                 </ol>
                 </p>
                 <p>
-                    Posterior Median Eye separation: Measurement of the distance between each eye w.r.t the diameter
+                    <b>Posterior Median Eye separation:</b> Measurement of the distance between each eye w.r.t the diameter
                     of each eye
                 </p>
                 <p>
-                    Opisthosoma: The “abdomen” of the spider.
+                    <b>Opisthosoma:</b> The “abdomen” of the spider.
                 </p>
                 <p>
-                    Head region of the Male:
+                    <b>Head region of the Male:</b>
                 <ol type="a">
                     <li>Sulci: pit like structure in the head.</li>
                     <li>Lobe: Raised lobe present near head.</li>
@@ -922,39 +931,48 @@
                 </ol>
                 </p>
                 <p>
-                    Chelicerae: Mouth Parts.
+                    <b>Chelicerae:</b> Mouth Parts.
                 </p>
                 <p>
-                    Apophyses: Outgrowth usually in male pedipalp.
+                    <b>Apophyses:</b> Outgrowth usually in male pedipalp.
                 </p>
                 <p>
-                    Sternum appearance:
+                    <b>Sternum appearance:</b>
                 <ol type="a">
                     <li>Pitted – having pits/indentations.</li>
                     <li>Rugose – having wrinkles.</li>
                 </ol>
                 </p>
                 <p>
-                    Coxae: First leg segment
+                    <b>Coxae:</b> First leg segment
                 </p>
                 <p>
-                    Trichobothrium: Hair like structure on legs.
+                    <b>Trichobothrium:</b> Hair like structure on legs.
                 </p>
                 <p>
-                    Cymbium: The last part of the last segment of the leg in a mature male
+                    <b>Cymbium:</b> The last part of the last segment of the leg in a mature male
                 </p>
                 <p>
-                    Paracymbium: Outgrowth of cymbium
+                    <b>Paracymbium:</b> Outgrowth of cymbium
                 </p>
                 <p>
-                    Embolus: The final part of the genital bulb consisting of the sperm duct.
+                    <b>Embolus:</b> The final part of the genital bulb consisting of the sperm duct.
                 </p>
                 <p>
-                    Epigyne: Point in the ventral female abdomen where the copulatory organs are present.
+                    <b>Epigyne:</b> Point in the ventral female abdomen where the copulatory organs are present.
                 </p>
             </div>
-            <div class="tab-pane fade" id="nav-acknowledgement" role="tabpanel" aria-labelledby="nav-acknowledgement-tab">
-                <span>To be updated - Stay tuned !!!</span>
+            <div class="tab-pane fade p-1" id="nav-acknowledgement" role="tabpanel" aria-labelledby="nav-acknowledgement-tab">
+                <p>The data used in this project was compiled by Anna Stäubli [as presented on the <a href="https://araneae.nmbe.ch/matrixlinkey" target="_blank">Araneae Linyphiidae key</a>.</p>
+
+                <ul type="none">
+                    <li>This Bayesian multi-entry interactive identification key was built under the supervision of:</li>
+                    <li>Dr. Rainer Breitling, </li>
+                    <li><i>Professor of Systems Biology</i>,</li>
+                    <li>Faculty of Science and Engineering,</li>
+                    <li>Manchester Institute of Biotechnology,</li>
+                    <li>The University of Manchester</li>                                
+                </ul>
             </div>
         </div>
 
