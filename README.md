@@ -32,7 +32,7 @@ Navigate to the SpiderIdentification folder that is newly created.
 Step 5:
 Open this folder in visual studio code 
 
-![unnamed](https://user-images.githubusercontent.com/75872231/234969812-73eb58d7-8b62-44dc-964e-4d069e8c3580.png)
+![image](https://user-images.githubusercontent.com/75872231/234972639-eb32a28a-77a2-4149-a32d-0452fd996024.png)
 
 Step 6: 
 Download python in system using the link:
@@ -72,4 +72,4 @@ Open the html file in the browser to run the UI.
 
 ![unnamed](https://user-images.githubusercontent.com/75872231/234970361-5362d218-2b9e-4761-9da9-61080faae2e0.png)
 
-Note: Once the key has been initialized, it can be used indefinitely. It may stop working in case the API has been stopped using Ctrl + C in the terminal window, or the run time has been stopped.
+Note: Once the key has been initialized, it can be used indefinitely. It may stop working in case the API has been stopped using Ctrl + C in the terminal window, or the run time has been force stopped.
