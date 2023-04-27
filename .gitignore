@@ -160,6 +160,3 @@ cython_debug/
 #.idea/
 
 # Ignore code generated files
-CalcTester.csv
-Ext1531csv.csv
-TestExt1531csv.csv
